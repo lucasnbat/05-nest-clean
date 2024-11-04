@@ -50,3 +50,9 @@
    node_modules
    dist
    ```
+
+## Configurando prisma
+
+- `npm i prisma -D`
+- `npm i @prisma/client`
+- `npx prisma init`
