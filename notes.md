@@ -13,6 +13,8 @@
 
 # Fundamentos de Nest.js
 
+## Conceitos
+
 - Temos três tipos de componentes principais:
   - **modules**:
     - Geralmente uma classe com o decorator `@Module`;
@@ -30,3 +32,21 @@
         como classes, outras funções, objetos, etc... Eles recebem o objeto a-
         baixo deles como parâmetro e retornam esse objeto modificado;
   - **services**
+
+## Eslint e prettier
+
+- `npm i eslint @rocketseat/eslint-config -D`
+- crie um `.eslintrc.json` com regra para não alertar sobre constructors vazios:
+  ```vim
+  {
+    "extends": "@rocketseat/eslint-config/node",
+    "rules": {
+        "no-useless-constructor":"off"
+    }
+  }
+  ```
+ - No `.eslintignore`:
+   ```vim
+   node_modules
+   dist
+   ```
