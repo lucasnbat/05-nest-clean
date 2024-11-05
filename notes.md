@@ -56,3 +56,12 @@
 - `npm i prisma -D`
 - `npm i @prisma/client`
 - `npx prisma init`
+
+## Criando primeiras rotas
+
+- Altere esses parâmetors no `tsconfig.json`:
+  ```vim
+    "strict": true,
+    "strictNullChecks": true,
+  ```
+-
