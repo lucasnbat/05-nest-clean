@@ -1,6 +1,10 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
 
+// esse arquivo equivale ao
+// const prismaClient = new PrismaClient()
+// no fastify. pegar uma instancia do PrismaClient e disponibilizar para uso
+
 // @Injectable()
 // export class PrismaService {
 //   // atributo e tipagem
