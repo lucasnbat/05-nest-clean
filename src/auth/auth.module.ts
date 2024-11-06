@@ -9,6 +9,7 @@ import { EnvType } from 'src/env'
     // importa modulo da Passport (lib de autenticação)
     PassportModule,
     // registerAsync usada para injetar serviços em módulos
+    // registerAsync é uma função de configuração como a forRoot()
     JwtModule.registerAsync({
       // injeta o ConfigService, pois vamos usar ele para buscar var ambiente
       inject: [ConfigService],

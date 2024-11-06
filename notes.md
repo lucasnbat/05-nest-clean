@@ -151,3 +151,12 @@
   ```bash
   npm install @nestjs/passport @nestjs/jwt
   ```
+
+- Melhor algoritmo : RS256
+  - Ele não usa apenas uma chave secreta (secret do jwt HS256)
+  - Ele usa duas:
+    - Privada: usada para gerar novos tokens, mantida em segredo;
+    - Pública: gerada pela chave privada, usada para decodificar e checar os
+      tokens recebidos;
+        - Pode vazar, pois o poder dela é apenas para decofidicação, não para
+          gerar novos tokens.
