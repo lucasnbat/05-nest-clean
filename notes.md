@@ -136,3 +136,18 @@
   }
   bootstrap()
   ```
+
+  ## Trabalhando com autenticação no Nest.js
+
+- Criar um arquivo `src/auth/auth.module.ts`. Módulos sempre precisam do 
+  decorator `@Module`:
+  ```vim
+  import { Module } from '@nestjs/common'
+
+  @Module({})
+  export class AuthModule {}
+  ```
+- Instalar: 
+  ```bash
+  npm install @nestjs/passport @nestjs/jwt
+  ```
