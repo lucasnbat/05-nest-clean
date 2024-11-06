@@ -72,3 +72,67 @@
   - Zod (`npm install zod`)
   - Usar zod-validation-error lib para melhorar legibilidade dos erros 
     (`npm install zod-validation-error`)
+
+## Como validar variáveis ambiente no Nest.js
+
+- `npm install @nestjs/config`
+- configure um `env.ts` na raiz:
+  ```vim
+    import { z } from 'zod'
+
+    export const envSchema = z.object({
+      DATABASE_URL: z.string().url(),
+      PORT: z.coerce.number().optional().default(3333),
+    })
+
+    export type EnvType = z.infer<typeof envSchema>
+  ```
+- Depois inserimos o `ConfigModule` na chave `imports`:
+  ```vim
+  @Module({
+    imports: [
+      ConfigModule.forRoot({
+        validate: (env) => envSchema.parse(env),
+        isGlobal: true,
+      }),
+    ],
+    controllers: [CreateAccountController],
+    providers: [PrismaService],
+  })
+  export class AppModule {}
+  ```
+- Note:
+  - No nest.js não precisamos ter apenas um único arquivo `.module.ts`.
+  - Podemos ter vários módulos e depois importar em um só. Para isso usamos
+    `imports: []`;
+  - Quando vamos passar configurações para um módulo, devemos usar a função
+    `forRoot()` e inserir uma outra função dentro com os critérios e regras
+    de validação. (acredito que podemos passar propriedades também, além 
+    de funções).
+  - o `isGlobal: true` permite que seja um módulo que funciona globalmente.
+    assim você não precisará importar ele em cada módulo que tiver na aplicação;
+- Adicione e use o `configService` no `main.ts`:
+  
+  ```vim
+  import { NestFactory } from '@nestjs/core'
+  import { AppModule } from './app.module'
+  import { ConfigService } from '@nestjs/config'
+
+  async function bootstrap() {
+    const app = await NestFactory.create(AppModule, {
+      logger: false, // tirar logs ao iniciar servidor
+    })
+
+    // app.get pega algum serviço (config module é um serviço do ConfigModule
+    // que está no app.module.ts)
+    // aparentemente é um plugin automático disponibilizado ao importar o módulo
+    // ConfigModule.forRoot()
+    const configService = app.get(ConfigService)
+
+    // usa o plugin para pegar a var. ambiente PORT
+    const port = configService.get('PORT')
+
+    await app.listen(port)
+  }
+  bootstrap()
+  ```
