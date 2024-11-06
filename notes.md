@@ -64,4 +64,11 @@
     "strict": true,
     "strictNullChecks": true,
   ```
--
+## Pipes no Nest.js
+
+- São middlewares. A ideia é interceptar e realizar operações antes de continuar
+  o processamento.
+- Níveis de uso do zod:
+  - Zod (`npm install zod`)
+  - Usar zod-validation-error lib para melhorar legibilidade dos erros 
+    (`npm install zod-validation-error`)
