@@ -1,3 +1,6 @@
+// o que esse módulo faz é configurar e disponibilizar chaves public e private
+// para haver a geração do token em outro lugar (authenticate-controller)
+
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
