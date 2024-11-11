@@ -160,3 +160,19 @@
       tokens recebidos;
         - Pode vazar, pois o poder dela é apenas para decofidicação, não para
           gerar novos tokens.
+
+## Algumas anotações
+
+- Note o `auth.module.ts` para verificar como funciona a autenticação no nest;
+- É preciso criar um `jwt.strategy.ts` pois há varias estratégias de autenticação
+  que a biblioteca Passport utiliza, e uma delas é a JWT;
+
+## Configurando o `jwt.strategy.ts`
+
+- Instale:
+  ```vim
+  npm install passport-jwt 
+  npm install @types/passport-jwt -D
+  ```
+  (essa é a strategy que vamos usar)
+- crie o arquivo `auth/jwt.strategy.ts` 

@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { EnvType } from 'src/env'
+import { JwtStrategy } from './jwt.strategy'
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { EnvType } from 'src/env'
     // registerAsync usada para injetar serviços em módulos
     // registerAsync é uma função de configuração como a forRoot()
     // provavelmente é graças ao JwtModule que conseguimos fazer o jwtDependency
-    // chamar toda essa maquinaria aqui embaixo
+    // chamar toda essa maquinaria do auth.module.ts aqui embaixo
     JwtModule.registerAsync({
       // injeta o ConfigService, pois vamos usar ele para buscar var ambiente
       inject: [ConfigService],
@@ -36,5 +37,6 @@ import { EnvType } from 'src/env'
       },
     }),
   ],
+  providers: [JwtStrategy],
 })
 export class AuthModule {}
