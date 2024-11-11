@@ -1,6 +1,7 @@
 import { Controller, Post, UseGuards } from '@nestjs/common'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 
+// minute: 01:56
 @Controller('/questions')
 // uso para acionar meu jwt.strategy.ts e proteger a rota
 // usamos 'jwt' porque estmaos usando jwt strategy do passport
