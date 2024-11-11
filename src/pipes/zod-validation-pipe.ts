@@ -9,6 +9,7 @@ export class ZodValidationPipe implements PipeTransform {
    * Método padrão dos pipes é o transform(). Ele pega a operação e executa
    * alguma coisa, no caso, uma validação usando uma dependência schema do
    * tipo ZodObject para validar via parse() o body que está sendo interceptado
+   * conforme as regras do schema recebido como dependência
    */
   transform(value: unknown) {
     try {

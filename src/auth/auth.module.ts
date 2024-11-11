@@ -13,6 +13,8 @@ import { EnvType } from 'src/env'
     PassportModule,
     // registerAsync usada para injetar serviços em módulos
     // registerAsync é uma função de configuração como a forRoot()
+    // provavelmente é graças ao JwtModule que conseguimos fazer o jwtDependency
+    // chamar toda essa maquinaria aqui embaixo
     JwtModule.registerAsync({
       // injeta o ConfigService, pois vamos usar ele para buscar var ambiente
       inject: [ConfigService],
@@ -24,7 +26,8 @@ import { EnvType } from 'src/env'
         const publicKey = config.get('JWT_PUBLIC_KEY', { infer: true })
 
         return {
-          // usamos o algoritmo rs256, depois codificamos para base64 e mais abaixo vamos fazer decode com Buffer.from()
+          // usamos o algoritmo rs256, depois codificamos para base64 (nos outros arquivos que fizemos isso)
+          // e agora abaixo vamos fazer decode com Buffer.from()
           signOptions: { algorithm: 'RS256' },
           // converte o texto da base64 para Buffer, uma forma de armanezar dados em memoria no nodejs
           privateKey: Buffer.from(privateKey, 'base64'),
