@@ -5,11 +5,11 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { EnvType } from 'src/env'
 import { z } from 'zod'
 
-const tokenSchema = z.object({
+const userPayloadSchema = z.object({
   sub: z.string().uuid(),
 })
 
-type TokenType = z.infer<typeof tokenSchema>
+export type UserPayloadType = z.infer<typeof userPayloadSchema>
 
 // criando uma classe que extende as caract. de PassportStrategy
 // aparentemente essa PassportStrategy é uma classe de configuração geral,
@@ -41,7 +41,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
-  async validate(payload: TokenType) {
-    return tokenSchema.parse(payload)
+  async validate(payload: UserPayloadType) {
+    return userPayloadSchema.parse(payload)
   }
 }

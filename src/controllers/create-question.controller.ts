@@ -1,5 +1,7 @@
 import { Controller, Post, UseGuards } from '@nestjs/common'
+import { CurrentUser } from 'src/auth/current-user-decorator'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { UserPayloadType } from 'src/auth/jwt.strategy'
 
 // minute: 01:56
 @Controller('/questions')
@@ -12,7 +14,10 @@ export class CreateQuestionController {
   constructor() {}
 
   @Post()
-  async handle() {
+  async handle(@CurrentUser() user: UserPayloadType) {
+    // aparentemente é possível buscar o user porque é uma rota autenticada
+    // então o sistema de módulos extrai o user a partir do token
+    console.log(user.sub)
     return 'ok'
   }
 }
