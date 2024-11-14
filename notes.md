@@ -176,3 +176,8 @@
   ```
   (essa é a strategy que vamos usar)
 - crie o arquivo `auth/jwt.strategy.ts` 
+
+## SWC
+
+- Plataforma em rust usada para compilar TS em JS;
+- É parecida com o esbuild usado por ferramentas como vitest, ts-node(acho) e etc;
