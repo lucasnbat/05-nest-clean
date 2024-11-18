@@ -245,3 +245,23 @@
   - Isso é necessário pois aqui não temos o módulo nestjs ConfigModule para car-
     regar as variáveis ambiente, essa pasta está fora do projeto nestjs, é do
     vitest;
+- Dito isso, faça o arquivo `setup-e2e.ts` e configure ele como setupFile no
+  `vitest.config.e2e.ts`;
+
+### Continuando com testes
+
+- Instale o supertest e tipagens:
+  ```bash
+  npm install supertest -D
+  npm install @types/supertest -D
+  ```
+- **Disclaimer**:
+  - Importante você colocar isso para o vitest conseguir importar as coisas da 
+    pasta source (`AppModule`, etc):
+    ```vim
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'), // Mapeia @ para o diretório src
+      },
+    },
+    ```
