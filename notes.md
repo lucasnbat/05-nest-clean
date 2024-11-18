@@ -181,3 +181,11 @@
 
 - Plataforma em rust usada para compilar TS em JS;
 - É parecida com o esbuild usado por ferramentas como vitest, ts-node(acho) e etc;
+- Instalação do vitest com a engine typescript desejada:
+  ```bash
+  npm i vitest unplugin-swc @swc/core @vitest/coverage-v8 -D
+  ```
+- crie o `vitest.config.ts` e insira:
+  ```vim
+
+  ```
