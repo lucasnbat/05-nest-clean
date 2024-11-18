@@ -87,7 +87,8 @@
 
     export type EnvType = z.infer<typeof envSchema>
   ```
-- Depois inserimos o `ConfigModule` na chave `imports`:
+- Depois inserimos o `ConfigModule` na chave `imports` (ConfigModule carrega vars
+  ambiente):
   ```vim
   @Module({
     imports: [
@@ -177,7 +178,7 @@
   (essa é a strategy que vamos usar)
 - crie o arquivo `auth/jwt.strategy.ts` 
 
-## SWC
+## SWC e configuração do vitest para testes E2E
 
 - Plataforma em rust usada para compilar TS em JS;
 - É parecida com o esbuild usado por ferramentas como vitest, ts-node(acho) e etc;
@@ -231,3 +232,16 @@
 - SWC entende decorators (por isso configuramos ele no vitest para esse projeto,
   que usa nestjs e muitos decorators). Esbuild (a engine nativa do vitest) não
   entende decorators;
+
+### Configurando banco de dados de teste
+
+- Nos testes E2E é bom evitar mocks, dados falsos, e deixar o mais próximo da 
+  realidade;
+- Você precisa de ambiente isolado para cada arquivo de testes ter seu banco de
+  dados limpo para ser executado;
+- Logo, a maioria dessas configs serão feitas no `vitest.config.e2e.ts` (só para
+  testes E2E);
+- Instale o dotenv: `npm install dotenv -D`
+  - Isso é necessário pois aqui não temos o módulo nestjs ConfigModule para car-
+    regar as variáveis ambiente, essa pasta está fora do projeto nestjs, é do
+    vitest;
