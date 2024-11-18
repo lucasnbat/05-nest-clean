@@ -12,7 +12,12 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" \"vitest.config.ts\" --fix"
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" \"vitest.config.ts\" \"vitest.config.e2e.ts\" --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false",
+    "test:e2e": "vitest run --config ./vitest.config.e2e.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -51,6 +56,7 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3",
     "unplugin-swc": "^1.5.1",
+    "vite-tsconfig-paths": "^5.1.2",
     "vitest": "^2.1.5"
   }
 }

@@ -187,5 +187,20 @@
   ```
 - crie o `vitest.config.ts` e insira:
   ```vim
+    import swc from 'unplugin-swc'
+    import { defineConfig } from 'vitest/config'
 
+    export default defineConfig({
+      test: {
+        globals: true,
+        root: './',
+      },
+      plugins: [
+        swc.vite({
+          module: { type: 'es6' },
+        }),
+      ], 
+    })
   ```
+- depois: `npm install vite-tsconfig-paths -D` (serve para usar o caminho confi-
+  gurado dentro do `tsconfig.json` dentro do `vitest.config.ts`)

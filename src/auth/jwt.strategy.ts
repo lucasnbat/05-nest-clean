@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 import { ExtractJwt, Strategy } from 'passport-jwt'
-import { EnvType } from 'src/env'
+import { EnvType } from '@/env'
 import { z } from 'zod'
 
 const userPayloadSchema = z.object({
