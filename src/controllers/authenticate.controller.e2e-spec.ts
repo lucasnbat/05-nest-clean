@@ -46,14 +46,17 @@ describe('Authenticate (e2e)', () => {
     })
 
     expect(response.statusCode).toBe(201)
-
-    const userOnDatabase = await prisma.user.findUnique({
-      where: {
-        email: 'johndoe@example.com',
-      },
+    expect(response.body).toEqual({
+      access_token: expect.any(String),
     })
 
-    // espera-se que retorne um valor válido (não nulo, não undefined)
-    expect(userOnDatabase).toBeTruthy()
+    // const userOnDatabase = await prisma.user.findUnique({
+    //   where: {
+    //     email: 'johndoe@example.com',
+    //   },
+    // })
+
+    // // espera-se que retorne um valor válido (não nulo, não undefined)
+    // expect(userOnDatabase).toBeTruthy()
   })
 })
