@@ -228,4 +228,6 @@
   adicionar: `"types": ["vitest/globals"]`;
 - Onde buscar compatibilidade da sua versão do node x ecmascript (es20...):
   - https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
-- 
+- SWC entende decorators (por isso configuramos ele no vitest para esse projeto,
+  que usa nestjs e muitos decorators). Esbuild (a engine nativa do vitest) não
+  entende decorators;
