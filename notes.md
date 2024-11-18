@@ -204,3 +204,28 @@
   ```
 - depois: `npm install vite-tsconfig-paths -D` (serve para usar o caminho confi-
   gurado dentro do `tsconfig.json` dentro do `vitest.config.ts`)
+- crie o arquivo `vitest.config.e2e.ts` com a config:
+  ```vim
+  import swc from 'unplugin-swc'
+  import { defineConfig } from 'vitest/config'
+
+  export default defineConfig({
+    test: {
+      // só isso de diferença (pegar testes apenas com essa extensão)
+      include: ['**/*.e2e-spec.ts'],
+      globals: true,
+      root: './',
+    },
+    plugins: [
+      swc.vite({
+        module: { type: 'es6' },
+      }),
+    ],
+  })
+  ```
+- Agora, para a função globals do vitest funcionar, você precisa habilitar 
+  nas configs (que já ta habilidade no `globals: true`) e, lá no tsconfig.json,
+  adicionar: `"types": ["vitest/globals"]`;
+- Onde buscar compatibilidade da sua versão do node x ecmascript (es20...):
+  - https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping
+- 
