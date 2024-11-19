@@ -33,7 +33,7 @@ export class FetchRecentQuestionsController {
      * Se tá na página 2, pula uma (a primeira mais recente) e mostra a segunda,
     que é a segunda pergunta mais recente 
      */
-    const perPage = 1
+    const perPage = 20
     const questions = await this.prismaDependency.question.findMany({
       take: perPage,
       skip: (page - 1) * perPage,

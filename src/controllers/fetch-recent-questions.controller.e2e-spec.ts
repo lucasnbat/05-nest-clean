@@ -47,22 +47,34 @@ describe('Fetch recent questions (e2e)', () => {
     // gera access token com nossa instancia jwt passando o user.id como subject
     const accessToken = jwt.sign({ sub: user.id })
 
-    const response = await request(app.getHttpServer())
-      .post('/questions')
-      .set('Authorization', `Bearer ${accessToken}`) // inserindo o token para usar a rota travada com autenticação
-      .send({
-        title: 'New question',
-        content: 'Content of question',
-      })
-
-    expect(response.statusCode).toBe(201)
-
-    const questionOnDatabase = await prisma.question.findFirst({
-      where: {
-        title: 'New question',
-      },
+    await prisma.question.createMany({
+      data: [
+        {
+          title: 'Question 01',
+          slug: 'question-01',
+          content: 'lorem ipsun risos dkdkkd',
+          authorId: user.id,
+        },
+        {
+          title: 'Question 02',
+          slug: 'question-02',
+          content: 'lorem ipsun risos dkdkkd',
+          authorId: user.id,
+        },
+      ],
     })
 
-    expect(questionOnDatabase).toBeTruthy()
+    const response = await request(app.getHttpServer())
+      .get('/questions')
+      .set('Authorization', `Bearer ${accessToken}`) // inserindo o token para usar a rota travada com autenticação
+      .send()
+
+    expect(response.statusCode).toBe(200)
+    expect(response.body).toEqual({
+      questions: [
+        expect.objectContaining({ title: 'Question 01' }),
+        expect.objectContaining({ title: 'Question 02' }),
+      ],
+    })
   })
 })

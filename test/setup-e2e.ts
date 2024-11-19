@@ -34,8 +34,6 @@ beforeAll(async () => {
 
   // roda apenas as migrações sem verificar alterações de schema
   execSync('npx prisma migrate deploy')
-
-  console.log('Criamos essa URL nova:', databaseURL)
 })
 
 afterAll(async () => {
