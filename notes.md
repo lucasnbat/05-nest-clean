@@ -265,3 +265,22 @@
       },
     },
     ```
+ 
+# Entendendo as camadas
+
+- Clean architecture é uma layer architecture, ou seja, é baseada em camadas;
+- Temos:
+  - *Camada externa/ Frameworks & Drivers*: camada onde tem a "infraestrutura"
+    como drivers de banco, além de interações com outros serviços e com o pró-
+    prio usuário (ex: prisma, APIs de envio de e-mails..., o front em si...);
+  - *Camada intermediária/ Interface adapters*: é a camada que adapta as conver-
+    sas e interações externas para lançar para as camadas internas de processa-
+    mento de regra de negócio (presenters, gateways...);
+  - *Core, regras de negócio, use cases/ Application Business Rules*: regras 
+    de negócio ou "core" da aplicação;
+  - *Enterprise Business Rules*: regras de negócio também. No contexto do DDD,
+    anda junto da camada anterior;
+- Lógica: requisição HTTP --> controller --> use case --> entities
+- **presenter**: adapta a forma que uma resposta é enviada para o usuário;
+  - filtra para apenas retornar os dados necessários, por exemplo;
+ 
