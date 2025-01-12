@@ -13,7 +13,7 @@ interface DeleteAnswerCommentUseCaseRequest {
 // em caso de sucesso retorna objeto vazio como aponta o return right({})
 type DeleteAnswerCommentUseCaseResponse = Either<
   ResourceNotFoundError | NotAllowedError,
-  {}
+  null
 >
 
 export class DeleteAnswerCommentUseCase {
@@ -39,6 +39,6 @@ export class DeleteAnswerCommentUseCase {
     // se for o autor do comentário, permite deletar
     await this.answerCommentsRepository.delete(answerComment)
 
-    return right({})
+    return right(null)
   }
 }

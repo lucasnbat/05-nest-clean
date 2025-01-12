@@ -332,3 +332,9 @@
         }
         ```
 - parei no 4:40 da aula "Copiando camada de domínio"
+
+# Testando seu domínio
+
+- Ao transplantar o core e o dominio para o projeto, sempre teste:
+  - `npx tsc --noEmit` para testar a compilação de JS para TS
+  - `npm run lint` para buscar os erros de linting

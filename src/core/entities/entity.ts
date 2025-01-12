@@ -26,7 +26,7 @@ export abstract class Entity<Props> {
   }
 
   // retorna se a entidade recebida na função é a entidade atual
-  public equals(entity: Entity<any>) {
+  public equals(entity: Entity<unknown>) {
     if (entity === this) {
       return true
     }

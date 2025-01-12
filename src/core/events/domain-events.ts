@@ -3,7 +3,7 @@ import { UniqueEntityID } from '../entities/unique-entity-id'
 
 import { DomainEvent } from './domain-event'
 
-type DomainEventCallback = (event: any) => void
+type DomainEventCallback = (event: unknown) => void
 
 export class DomainEvents {
   // handlersMap tem o nome do evento (string) e a função que será chamada
@@ -20,10 +20,10 @@ export class DomainEvents {
   // que já estão salvas no BD e que estão com ready = true, mas ainda não
   // foram disparados )
   // deveria se chamar markedAggregatesForDespatch
-  private static markedAggregates: AgregateRoot<any>[] = []
+  private static markedAggregates: AgregateRoot<unknown>[] = []
 
   // serve para marcar o agregado dentro do array acima (markedAgreggates)
-  public static markAggregateForDispatch(aggregate: AgregateRoot<any>) {
+  public static markAggregateForDispatch(aggregate: AgregateRoot<unknown>) {
     // se não achou o agregado com id passado na lista, agreggateFound = false
     const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id)
 
@@ -37,7 +37,7 @@ export class DomainEvents {
   // true e fazer o subscriber disparar o evento de notificação, por ex
   // É o método que dispara os eventos de um agregado marcado na lista de
   // markedAggregates
-  private static dispatchAggregateEvents(aggregate: AgregateRoot<any>) {
+  private static dispatchAggregateEvents(aggregate: AgregateRoot<unknown>) {
     // veja que ele vai pegar a minha resposta, o meu agregado, ir dentro
     // dos eventos que ele pré disparou com addDomainEvent() e disparar um
     // a um
@@ -45,7 +45,7 @@ export class DomainEvents {
   }
 
   private static removeAggregateFromMarkedDispatchList(
-    aggregate: AgregateRoot<any>,
+    aggregate: AgregateRoot<unknown>,
   ) {
     const index = this.markedAggregates.findIndex((a) => a.equals(aggregate))
 
@@ -55,7 +55,7 @@ export class DomainEvents {
   // função utilitaria para achar id do agreggate marcado como pendente
   private static findMarkedAggregateByID(
     id: UniqueEntityID,
-  ): AgregateRoot<any> | undefined {
+  ): AgregateRoot<unknown> | undefined {
     return this.markedAggregates.find((aggregate) => aggregate.id.equals(id))
   }
 
