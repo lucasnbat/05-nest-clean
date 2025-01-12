@@ -283,4 +283,8 @@
 - Lógica: requisição HTTP --> controller --> use case --> entities
 - **presenter**: adapta a forma que uma resposta é enviada para o usuário;
   - filtra para apenas retornar os dados necessários, por exemplo;
- 
+
+# Notas pós Módulo DDD
+
+* O módulo de DDD tem uma config. de eslint e prettier simples e funcional;
+* Esse módulo de Nestjs mostra a melhor forma de configurar um ambiente de teste;
