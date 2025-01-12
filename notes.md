@@ -331,5 +331,4 @@
             ) { ... } 
         }
         ```
-
-
+- parei no 4:40 da aula "Copiando camada de domínio"
