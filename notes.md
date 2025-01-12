@@ -286,5 +286,50 @@
 
 # Notas pós Módulo DDD
 
-* O módulo de DDD tem uma config. de eslint e prettier simples e funcional;
-* Esse módulo de Nestjs mostra a melhor forma de configurar um ambiente de teste;
+- O módulo de DDD tem uma config. de eslint e prettier simples e funcional;
+- Esse módulo de Nestjs mostra a melhor forma de configurar um ambiente de teste;
+
+# Entendimentos da revisão
+
+- Sobre o módulo de autenticação (`auth/`) e demais:
+  - `auth.module.ts` carrega a maquinaria geral para interpretação e autenticação,
+    tem meios de buscar as variáveis ambiente, capturar as chaves pública e pri-
+    vada e decodificar elas;
+  - `jwt.strategy.ts` tem a função de capturar um token bearer, decodificar ele
+    e oferece uma função `validate` para validar se o sub retornado é correto;
+  - `jwt-auth.guard.ts` é uma simples instanciação de um auth guard jwt para ser
+    usado nos arquivos
+  - O `current-user-decorator.ts` tem a função simples de identificar o usuário
+    ativo no momento forçando a usar a tipagem (`as`) definida no 
+    `jwt-auth.guard.ts`.
+  - Um Pipe (`@UsePipes`) é um simples middleware que faz operações antes do 
+    processamento do controller ou outro tipo de arquivo;
+  - `@UseGuards` aparentemente são como pipes que você usa para autenticação;
+- Veja dois jeitos de usar os pipes para validar body:
+  - Em um, uso o `@UsePipes`:
+    - ```vim
+        @Post()
+        @UsePipes(new ZodValidationPipe(authenticateBodySchema))
+        async handle(@Body() body: AuthenticateBodyType) {
+          const { email, password } = body
+          ...
+        }
+      ```
+  - Noutro caso, posso usar dentro do decorator `@Body`:
+      - ```vim
+        const bodyValidationPipe = new ZodValidationPipe(createQuestionBodySchema)
+
+        @Controller('/questions')
+        @UseGuards(JwtAuthGuard)
+        export class CreateQuestionController {
+          constructor(private prismaDependency: PrismaService) {}
+
+          @Post()
+          async handle(
+            @CurrentUser() user: UserPayloadType,
+            @Body(bodyValidationPipe) body: CreateQuestionBodyType,
+            ) { ... } 
+        }
+        ```
+
+
