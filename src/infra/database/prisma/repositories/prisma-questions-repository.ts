@@ -9,8 +9,19 @@ import { PrismaQuestionMapper } from '../mappers/prisma-question-mapper'
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
   constructor(private prisma: PrismaService) {}
+
   async findBySlug(slug: string): Promise<Question | null> {
-    throw new Error('Method not implemented.')
+    const question = await this.prisma.question.findUnique({
+      where: {
+        slug,
+      },
+    })
+
+    if (!question) {
+      return null
+    }
+
+    return PrismaQuestionMapper.toDomain(question)
   }
 
   create(question: Question): Promise<void> {
@@ -33,8 +44,21 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     return PrismaQuestionMapper.toDomain(question)
   }
 
-  findManyRecent(params: PaginationParams): Promise<Question[]> {
-    throw new Error('Method not implemented.')
+  async findManyRecent({ page }: PaginationParams): Promise<Question[]> {
+    const questions = await this.prisma.question.findMany({
+      orderBy: {
+        createAt: 'desc',
+      },
+      take: 20, // pegue sempre 20 itens
+      skip: (page - 1) * 20, // sempre pulando de 20 em 20 conforme a page (1,2...)
+    })
+
+    return questions.map((question) => {
+      return PrismaQuestionMapper.toDomain(question)
+    })
+
+    // funcionaria assim também:
+    // return questions.map(PrismaQuestionMapper.toDomain)
   }
 
   save(question: Question): Promise<void> {
