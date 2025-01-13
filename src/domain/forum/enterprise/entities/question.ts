@@ -14,7 +14,7 @@ export interface QuestionProps {
   slug: Slug
   attachments: QuestionAttachmentList // anexos da pergunta
   createdAt: Date
-  updatedAt?: Date
+  updatedAt?: Date | null
 }
 
 // Troquei "extends Entity" por "extends AgregateRoot"

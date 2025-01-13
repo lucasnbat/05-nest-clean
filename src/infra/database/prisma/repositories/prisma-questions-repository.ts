@@ -3,12 +3,15 @@ import { QuestionsRepository } from '@/domain/forum/application/repositories/que
 import { Question } from '@/domain/forum/enterprise/entities/question'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
+import { PrismaQuestionMapper } from '../mappers/prisma-question-mapper'
 
 // pois vai ser enviado como dependency para algum construtor de outra classe
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
   constructor(private prisma: PrismaService) {}
-  async findBySlug(slug: string): Promise<Question | null> {}
+  async findBySlug(slug: string): Promise<Question | null> {
+    throw new Error('Method not implemented.')
+  }
 
   create(question: Question): Promise<void> {
     throw new Error('Method not implemented.')
@@ -20,6 +23,14 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
         id,
       },
     })
+
+    if (!question) {
+      return null
+    }
+
+    // mapper que converte o formato da question do prisma para
+    // formato de question do dominio
+    return PrismaQuestionMapper.toDomain(question)
   }
 
   findManyRecent(params: PaginationParams): Promise<Question[]> {
