@@ -24,8 +24,12 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     return PrismaQuestionMapper.toDomain(question)
   }
 
-  create(question: Question): Promise<void> {
-    throw new Error('Method not implemented.')
+  async create(question: Question): Promise<void> {
+    const data = PrismaQuestionMapper.toPrisma(question)
+
+    await this.prisma.question.create({
+      data,
+    })
   }
 
   async findById(id: string): Promise<Question | null> {
@@ -61,11 +65,24 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     // return questions.map(PrismaQuestionMapper.toDomain)
   }
 
-  save(question: Question): Promise<void> {
-    throw new Error('Method not implemented.')
+  async save(question: Question): Promise<void> {
+    const data = PrismaQuestionMapper.toPrisma(question)
+
+    await this.prisma.question.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
   }
 
-  delete(question: Question): Promise<void> {
-    throw new Error('Method not implemented.')
+  async delete(question: Question): Promise<void> {
+    const data = PrismaQuestionMapper.toPrisma(question)
+
+    await this.prisma.question.delete({
+      where: {
+        id: data.id,
+      },
+    })
   }
 }
