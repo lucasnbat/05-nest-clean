@@ -30,7 +30,7 @@ model Question {
   slug      String    @unique
   content   String
   createAt  DateTime  @default(now()) @map("created_at")
-  updateAte DateTime? @updatedAt @map("updated_at")
+  updateAt DateTime? @updatedAt @map("updated_at")
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @map("author_id")

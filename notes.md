@@ -374,3 +374,7 @@
     }
   }
   ```
+# Mappers
+
+- São utilitários que convertem entidades do formato de uma camada
+  para o formato de outra camada;

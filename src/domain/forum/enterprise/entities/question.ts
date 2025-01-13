@@ -1,20 +1,20 @@
-import { AgregateRoot } from "@/core/entities/agregate-root";
-import { Slug } from "./value-objects/slug";
-import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { Optional } from "@/core/types/optional";
-import dayjs from "dayjs";
-import { QuestionAttachmentList } from "./question-attachment-list";
-import { QuestionBestAnswerChosenEvent } from "../events/question-best-answer-chosen-event";
+import { AgregateRoot } from '@/core/entities/agregate-root'
+import { Slug } from './value-objects/slug'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
+import dayjs from 'dayjs'
+import { QuestionAttachmentList } from './question-attachment-list'
+import { QuestionBestAnswerChosenEvent } from '../events/question-best-answer-chosen-event'
 
 export interface QuestionProps {
-  authorId: UniqueEntityID;
-  bestAnswerId?: UniqueEntityID; // melhor resposta selecionada pelo autor
-  title: string;
-  content: string;
-  slug: Slug;
-  attachments: QuestionAttachmentList; // anexos da pergunta
-  createdAt: Date;
-  updatedAt?: Date;
+  authorId: UniqueEntityID
+  bestAnswerId?: UniqueEntityID // melhor resposta selecionada pelo autor
+  title: string
+  content: string
+  slug: Slug
+  attachments: QuestionAttachmentList // anexos da pergunta
+  createdAt: Date
+  updatedAt?: Date
 }
 
 // Troquei "extends Entity" por "extends AgregateRoot"
@@ -32,75 +32,75 @@ export interface QuestionProps {
 // tempo
 export class Question extends AgregateRoot<QuestionProps> {
   get authorId() {
-    return this.props.authorId;
+    return this.props.authorId
   }
 
   get bestAnswerId() {
-    return this.props.bestAnswerId;
+    return this.props.bestAnswerId
   }
 
   get title() {
-    return this.props.title;
+    return this.props.title
   }
 
   get content() {
-    return this.props.content;
+    return this.props.content
   }
 
   get slug() {
-    return this.props.slug;
+    return this.props.slug
   }
 
   get attachments() {
-    return this.props.attachments;
+    return this.props.attachments
   }
 
   get createdAt() {
-    return this.props.createdAt;
+    return this.props.createdAt
   }
 
   get updatedAt() {
-    return this.props.updatedAt;
+    return this.props.updatedAt
   }
 
   // se pergunta for de no max 3 dias, marcada como nova
   // esse isNew apesar de não estar nas props vira acessível (Question.create({}))
   // ou seja ela aparece para selecionar e informar ao usar o create()
   get isNew(): boolean {
-    return dayjs().diff(this.createdAt, "days") <= 3;
+    return dayjs().diff(this.createdAt, 'days') <= 3
   }
 
   // resumo da resposta limitado a 120 caracteres, sem espaço no fim e com
   // '...' no final
   get excerpt() {
-    return this.content.substring(0, 120).trimEnd().concat("...");
+    return this.content.substring(0, 120).trimEnd().concat('...')
   }
 
   // método criado para vigiar e setar datas de alteração de informação
   private touch() {
-    this.props.updatedAt = new Date();
+    this.props.updatedAt = new Date()
   }
 
   // se atualizar titulo atualiza o slug automaticamente
   set title(title: string) {
-    this.props.title = title;
-    this.props.slug = Slug.createFromText(title);
-    this.touch();
+    this.props.title = title
+    this.props.slug = Slug.createFromText(title)
+    this.touch()
   }
 
   set content(content: string) {
-    this.props.content = content;
-    this.touch();
+    this.props.content = content
+    this.touch()
   }
 
   set attachments(attachments: QuestionAttachmentList) {
-    this.props.attachments = attachments;
-    this.touch();
+    this.props.attachments = attachments
+    this.touch()
   }
 
   set bestAnswerId(bestAnswerId: UniqueEntityID | undefined) {
     if (bestAnswerId === undefined) {
-      return;
+      return
     }
 
     // if (
@@ -114,13 +114,11 @@ export class Question extends AgregateRoot<QuestionProps> {
       this.props.bestAnswerId === undefined ||
       !bestAnswerId.equals(this.props.bestAnswerId)
     ) {
-      this.addDomainEvent(
-        new QuestionBestAnswerChosenEvent(this, bestAnswerId),
-      );
+      this.addDomainEvent(new QuestionBestAnswerChosenEvent(this, bestAnswerId))
     }
 
-    this.props.bestAnswerId = bestAnswerId;
-    this.touch();
+    this.props.bestAnswerId = bestAnswerId
+    this.touch()
   }
 
   // esse método vai agir como o constructor de Entity: passar as props para os
@@ -128,7 +126,7 @@ export class Question extends AgregateRoot<QuestionProps> {
   // porque vamos fazer isso? para permitir preenchimento automático do createdAt()
   // usamos o Optional para que não seja preciso passar createdAt ao criar nova question
   static create(
-    props: Optional<QuestionProps, "createdAt" | "slug" | "attachments">,
+    props: Optional<QuestionProps, 'createdAt' | 'slug' | 'attachments'>,
     id?: UniqueEntityID,
   ) {
     const question = new Question(
@@ -139,7 +137,7 @@ export class Question extends AgregateRoot<QuestionProps> {
         attachments: props.attachments ?? new QuestionAttachmentList(),
       },
       id,
-    );
-    return question;
+    )
+    return question
   }
 }
