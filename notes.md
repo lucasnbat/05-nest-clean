@@ -338,3 +338,29 @@
 - Ao transplantar o core e o dominio para o projeto, sempre teste:
   - `npx tsc --noEmit` para testar a compilação de JS para TS
   - `npm run lint` para buscar os erros de linting
+
+# Criando camada de infraestrutura
+
+- Começa movendo tudo que não é testável unitariamente para `infra/`,
+  tudo que é dependência externa (pastas pipes/, prisma/, controllers/,
+  auth/, arquivos app.module.ts...)
+- Em `http/` você coloca o que está relacionado a REST...controllers/ e
+  pipes/, inicialmente
+- Ao mexer nas pastas assim, sempre verifica as importações e rode os 
+  comandos de compilação TS junto aos de lint;
+- no arquivo `nest-cli.json`, já que inserimos o main dentro de infra, 
+  precisa mudar o entryfile:
+  ```vim
+  {
+    "$schema": "https://json.schemastore.org/nest-cli",
+    "collection": "@nestjs/schematics",
+    "sourceRoot": "src",
+    "entryFile": "infra/main", // adicionando essa linha
+    "compilerOptions": {
+      "deleteOutDir": true
+    }
+  }
+  ```
+
+
+

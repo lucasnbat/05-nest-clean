@@ -1,12 +1,12 @@
-import { AppModule } from '@/app.module'
-import { PrismaService } from '@/prisma/prisma.service'
+import { AppModule } from '@/infra/app.module'
+import { PrismaService } from '@/infra/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import { hash } from 'bcryptjs'
 import request from 'supertest'
 
-describe('Fetch recent questions (e2e)', () => {
+describe('Create question (e2e)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -35,7 +35,7 @@ describe('Fetch recent questions (e2e)', () => {
     await app.init()
   })
 
-  test('[GET] /questions', async () => {
+  test('[POST] /questions', async () => {
     const user = await prisma.user.create({
       data: {
         name: 'John Doe',
@@ -47,34 +47,22 @@ describe('Fetch recent questions (e2e)', () => {
     // gera access token com nossa instancia jwt passando o user.id como subject
     const accessToken = jwt.sign({ sub: user.id })
 
-    await prisma.question.createMany({
-      data: [
-        {
-          title: 'Question 01',
-          slug: 'question-01',
-          content: 'lorem ipsun risos dkdkkd',
-          authorId: user.id,
-        },
-        {
-          title: 'Question 02',
-          slug: 'question-02',
-          content: 'lorem ipsun risos dkdkkd',
-          authorId: user.id,
-        },
-      ],
-    })
-
     const response = await request(app.getHttpServer())
-      .get('/questions')
+      .post('/questions')
       .set('Authorization', `Bearer ${accessToken}`) // inserindo o token para usar a rota travada com autenticação
-      .send()
+      .send({
+        title: 'New question',
+        content: 'Content of question',
+      })
 
-    expect(response.statusCode).toBe(200)
-    expect(response.body).toEqual({
-      questions: [
-        expect.objectContaining({ title: 'Question 01' }),
-        expect.objectContaining({ title: 'Question 02' }),
-      ],
+    expect(response.statusCode).toBe(201)
+
+    const questionOnDatabase = await prisma.question.findFirst({
+      where: {
+        title: 'New question',
+      },
     })
+
+    expect(questionOnDatabase).toBeTruthy()
   })
 })
