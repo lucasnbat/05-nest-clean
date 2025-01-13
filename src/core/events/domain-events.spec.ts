@@ -8,7 +8,7 @@ class CustomAggregateCreated implements DomainEvent {
   // informações que estou anotando do evento: data e o
   // proprio objeto agregado
   public ocurredAt: Date
-  private aggregate: CustomAggregate // eslint-disable-line
+  private aggregate: CustomAggregate; // eslint-disable-line
 
   constructor(aggregate: CustomAggregate) {
     this.ocurredAt = new Date()
