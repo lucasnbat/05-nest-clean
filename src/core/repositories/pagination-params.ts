@@ -2,5 +2,5 @@
 // é só arquivo que você deseja compartilhar entre os repositórios
 
 export interface PaginationParams {
-  page: number
+  page: number;
 }

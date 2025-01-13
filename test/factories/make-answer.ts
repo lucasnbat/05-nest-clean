@@ -1,6 +1,6 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Answer, AnswerProps } from '@/domain/forum/enterprise/entities/answer'
-import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
+import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Answer, AnswerProps } from "@/domain/forum/enterprise/entities/answer";
+import { Slug } from "@/domain/forum/enterprise/entities/value-objects/slug";
 
 // override: recebe a versão de AnswerProps onde todos os dados
 // são opcionais...isso para que eu não precise informar obrigatoriamente
@@ -13,13 +13,13 @@ export function makeAnswer(
     {
       questionId: new UniqueEntityID(),
       authorId: new UniqueEntityID(),
-      content: 'Example content',
+      content: "Example content",
       ...override, // sobrescreve com a chave/valor que foi recebida no makeAnswer()
     },
     id, // retorna o id manual (se foi passado)
-  )
+  );
 
-  return answer
+  return answer;
 }
 
 // Então se você passar:

@@ -1,9 +1,9 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import {
   Question,
   QuestionProps,
-} from '@/domain/forum/enterprise/entities/question'
-import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
+} from "@/domain/forum/enterprise/entities/question";
+import { Slug } from "@/domain/forum/enterprise/entities/value-objects/slug";
 
 // override: recebe a versão de QuestionProps onde todos os dados
 // são opcionais...isso para que eu não precise informar obrigatoriamente
@@ -14,16 +14,16 @@ export function makeQuestion(
 ) {
   const question = Question.create(
     {
-      title: 'Example question',
-      slug: Slug.create('example-question'),
+      title: "Example question",
+      slug: Slug.create("example-question"),
       authorId: new UniqueEntityID(),
-      content: 'Example content',
+      content: "Example content",
       ...override, // sobrescreve com a chave/valor que foi recebida no makeQuestion()
     },
     id, // retorna o id manual (se foi passado)
-  )
+  );
 
-  return question
+  return question;
 }
 
 // Então se você passar:

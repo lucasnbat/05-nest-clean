@@ -1,13 +1,13 @@
-import { Entity } from '@/core/entities/entity'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Optional } from '@/core/types/optional'
+import { Entity } from "@/core/entities/entity";
+import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Optional } from "@/core/types/optional";
 
 export interface AnswerProps {
-  content: string
-  authorId: UniqueEntityID
-  questionId: UniqueEntityID
-  createdAt: Date
-  updatedAt?: Date // para inserir flag de "editada" na resposta
+  content: string;
+  authorId: UniqueEntityID;
+  questionId: UniqueEntityID;
+  createdAt: Date;
+  updatedAt?: Date; // para inserir flag de "editada" na resposta
 }
 
 // passando a interface AnswerProps como generic, estou dizendo que a classe
@@ -24,41 +24,41 @@ export interface AnswerProps {
 // Se eu estou definindo
 export class Answer extends Entity<AnswerProps> {
   get authorId() {
-    return this.props.authorId
+    return this.props.authorId;
   }
 
   get questionId() {
-    return this.props.questionId
+    return this.props.questionId;
   }
 
   get content() {
-    return this.props.content
+    return this.props.content;
   }
 
   get createdAt() {
-    return this.props.createdAt
+    return this.props.createdAt;
   }
 
   get updatedAt() {
-    return this.props.updatedAt
+    return this.props.updatedAt;
   }
 
   get excerpt() {
-    return this.content.substring(0, 120).trimEnd().concat('...')
+    return this.content.substring(0, 120).trimEnd().concat("...");
   }
 
   // método criado para vigiar e setar datas de alteração de informação
   private touch() {
-    this.props.updatedAt = new Date()
+    this.props.updatedAt = new Date();
   }
 
   set content(content: string) {
-    this.props.content = content
-    this.touch()
+    this.props.content = content;
+    this.touch();
   }
 
   static create(
-    props: Optional<AnswerProps, 'createdAt'>,
+    props: Optional<AnswerProps, "createdAt">,
     id?: UniqueEntityID,
   ) {
     const answer = new Answer(
@@ -67,7 +67,7 @@ export class Answer extends Entity<AnswerProps> {
         createdAt: props.createdAt ?? new Date(), // sistema gera autpmático caso não tenha createdAt informado
       },
       id,
-    )
-    return answer
+    );
+    return answer;
   }
 }

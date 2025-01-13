@@ -1,8 +1,8 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import {
   AnswerAttachment,
   AnswerAttachmentProps,
-} from '@/domain/forum/enterprise/entities/answer-attachment'
+} from "@/domain/forum/enterprise/entities/answer-attachment";
 
 export function makeAnswerAttachment(
   override: Partial<AnswerAttachmentProps> = {},
@@ -15,7 +15,7 @@ export function makeAnswerAttachment(
       ...override, // sobrescreve com a chave/valor que foi recebida no makeAnswer()
     },
     id, // retorna o id manual (se foi passado)
-  )
+  );
 
-  return answerAttachment
+  return answerAttachment;
 }
