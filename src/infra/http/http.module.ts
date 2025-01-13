@@ -1,19 +1,17 @@
-import { Module } from '@nestjs/common'
-import { CreateAccountController } from './controllers/create-account.controller'
-import { AuthenticateController } from './controllers/authenticate-controller.controller'
-import { CreateQuestionController } from './controllers/create-question.controller'
-import { FetchRecentQuestionsController } from './controllers/fetch-recent-questions.controller'
-import { PrismaService } from '../database/prisma/prisma.service'
-import { DatabaseModule } from '@faker-js/faker/.'
+import { Module } from "@nestjs/common";
+import { CreateAccountController } from "./controllers/create-account.controller";
+import { AuthenticateController } from "./controllers/authenticate-controller.controller";
+import { CreateQuestionController } from "./controllers/create-question.controller";
+import { FetchRecentQuestionsController } from "./controllers/fetch-recent-questions.controller";
+import { DatabaseModule } from "../database/database.module";
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule], // importa o database module com o prisma service
   controllers: [
     CreateAccountController,
     AuthenticateController,
     CreateQuestionController,
     FetchRecentQuestionsController,
   ],
-  providers: [PrismaService], // preciso declarar aqui porque ele não é global
 })
 export class HttpModule {}

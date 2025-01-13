@@ -1,6 +1,6 @@
 # Nest.js
 
-- Crie um projeto: 
+- Crie um projeto:
   ```vim
   nest new nome-projeto
   ```
@@ -24,7 +24,7 @@
     - providers: todas as dependências que os controllers podem ter (ex: AppService);
       - Se não tiver AppService, dá ruim;
       - Para que a dep. seja injetável, precisa estar com o decorator `@Injectable`
-    - *tudo que não recebe req. http é um provider. se recebe req. http, é controller*
+    - _tudo que não recebe req. http é um provider. se recebe req. http, é controller_
   - **controllers**
     - portas de entrada para a aplicação, geralmente por rotas web de api
     - usam fortemente decorators no nest.js
@@ -45,11 +45,11 @@
     }
   }
   ```
- - No `.eslintignore`:
-   ```vim
-   node_modules
-   dist
-   ```
+- No `.eslintignore`:
+  ```vim
+  node_modules
+  dist
+  ```
 
 ## Configurando prisma
 
@@ -64,19 +64,21 @@
     "strict": true,
     "strictNullChecks": true,
   ```
+
 ## Pipes no Nest.js
 
 - São middlewares. A ideia é interceptar e realizar operações antes de continuar
   o processamento.
 - Níveis de uso do zod:
   - Zod (`npm install zod`)
-  - Usar zod-validation-error lib para melhorar legibilidade dos erros 
+  - Usar zod-validation-error lib para melhorar legibilidade dos erros
     (`npm install zod-validation-error`)
 
 ## Como validar variáveis ambiente no Nest.js
 
 - `npm install @nestjs/config`
 - configure um `env.ts` na raiz:
+
   ```vim
     import { z } from 'zod'
 
@@ -87,6 +89,7 @@
 
     export type EnvType = z.infer<typeof envSchema>
   ```
+
 - Depois inserimos o `ConfigModule` na chave `imports` (ConfigModule carrega vars
   ambiente):
   ```vim
@@ -108,12 +111,12 @@
     `imports: []`;
   - Quando vamos passar configurações para um módulo, devemos usar a função
     `forRoot()` e inserir uma outra função dentro com os critérios e regras
-    de validação. (acredito que podemos passar propriedades também, além 
+    de validação. (acredito que podemos passar propriedades também, além
     de funções).
   - o `isGlobal: true` permite que seja um módulo que funciona globalmente.
     assim você não precisará importar ele em cada módulo que tiver na aplicação;
 - Adicione e use o `configService` no `main.ts`:
-  
+
   ```vim
   import { NestFactory } from '@nestjs/core'
   import { AppModule } from './app.module'
@@ -140,15 +143,18 @@
 
   ## Trabalhando com autenticação no Nest.js
 
-- Criar um arquivo `src/auth/auth.module.ts`. Módulos sempre precisam do 
+- Criar um arquivo `src/auth/auth.module.ts`. Módulos sempre precisam do
   decorator `@Module`:
+
   ```vim
   import { Module } from '@nestjs/common'
 
   @Module({})
   export class AuthModule {}
   ```
-- Instalar: 
+
+- Instalar:
+
   ```bash
   npm install @nestjs/passport @nestjs/jwt
   ```
@@ -159,8 +165,8 @@
     - Privada: usada para gerar novos tokens, mantida em segredo;
     - Pública: gerada pela chave privada, usada para decodificar e checar os
       tokens recebidos;
-        - Pode vazar, pois o poder dela é apenas para decofidicação, não para
-          gerar novos tokens.
+      - Pode vazar, pois o poder dela é apenas para decofidicação, não para
+        gerar novos tokens.
 
 ## Algumas anotações
 
@@ -172,11 +178,11 @@
 
 - Instale:
   ```vim
-  npm install passport-jwt 
+  npm install passport-jwt
   npm install @types/passport-jwt -D
   ```
   (essa é a strategy que vamos usar)
-- crie o arquivo `auth/jwt.strategy.ts` 
+- crie o arquivo `auth/jwt.strategy.ts`
 
 ## SWC e configuração do vitest para testes E2E
 
@@ -187,6 +193,7 @@
   npm i vitest unplugin-swc @swc/core @vitest/coverage-v8 -D
   ```
 - crie o `vitest.config.ts` e insira:
+
   ```vim
     import swc from 'unplugin-swc'
     import { defineConfig } from 'vitest/config'
@@ -200,12 +207,14 @@
         swc.vite({
           module: { type: 'es6' },
         }),
-      ], 
+      ],
     })
   ```
+
 - depois: `npm install vite-tsconfig-paths -D` (serve para usar o caminho confi-
   gurado dentro do `tsconfig.json` dentro do `vitest.config.ts`)
 - crie o arquivo `vitest.config.e2e.ts` com a config:
+
   ```vim
   import swc from 'unplugin-swc'
   import { defineConfig } from 'vitest/config'
@@ -224,7 +233,8 @@
     ],
   })
   ```
-- Agora, para a função globals do vitest funcionar, você precisa habilitar 
+
+- Agora, para a função globals do vitest funcionar, você precisa habilitar
   nas configs (que já ta habilidade no `globals: true`) e, lá no tsconfig.json,
   adicionar: `"types": ["vitest/globals"]`;
 - Onde buscar compatibilidade da sua versão do node x ecmascript (es20...):
@@ -235,7 +245,7 @@
 
 ### Configurando banco de dados de teste
 
-- Nos testes E2E é bom evitar mocks, dados falsos, e deixar o mais próximo da 
+- Nos testes E2E é bom evitar mocks, dados falsos, e deixar o mais próximo da
   realidade;
 - Você precisa de ambiente isolado para cada arquivo de testes ter seu banco de
   dados limpo para ser executado;
@@ -256,7 +266,7 @@
   npm install @types/supertest -D
   ```
 - **Disclaimer**:
-  - Importante você colocar isso para o vitest conseguir importar as coisas da 
+  - Importante você colocar isso para o vitest conseguir importar as coisas da
     pasta source (`AppModule`, etc):
     ```vim
     resolve: {
@@ -265,20 +275,20 @@
       },
     },
     ```
- 
+
 # Entendendo as camadas
 
 - Clean architecture é uma layer architecture, ou seja, é baseada em camadas;
 - Temos:
-  - *Camada externa/ Frameworks & Drivers*: camada onde tem a "infraestrutura"
+  - _Camada externa/ Frameworks & Drivers_: camada onde tem a "infraestrutura"
     como drivers de banco, além de interações com outros serviços e com o pró-
     prio usuário (ex: prisma, APIs de envio de e-mails..., o front em si...);
-  - *Camada intermediária/ Interface adapters*: é a camada que adapta as conver-
+  - _Camada intermediária/ Interface adapters_: é a camada que adapta as conver-
     sas e interações externas para lançar para as camadas internas de processa-
     mento de regra de negócio (presenters, gateways...);
-  - *Core, regras de negócio, use cases/ Application Business Rules*: regras 
+  - _Core, regras de negócio, use cases/ Application Business Rules_: regras
     de negócio ou "core" da aplicação;
-  - *Enterprise Business Rules*: regras de negócio também. No contexto do DDD,
+  - _Enterprise Business Rules_: regras de negócio também. No contexto do DDD,
     anda junto da camada anterior;
 - Lógica: requisição HTTP --> controller --> use case --> entities
 - **presenter**: adapta a forma que uma resposta é enviada para o usuário;
@@ -300,12 +310,13 @@
   - `jwt-auth.guard.ts` é uma simples instanciação de um auth guard jwt para ser
     usado nos arquivos
   - O `current-user-decorator.ts` tem a função simples de identificar o usuário
-    ativo no momento forçando a usar a tipagem (`as`) definida no 
+    ativo no momento forçando a usar a tipagem (`as`) definida no
     `jwt-auth.guard.ts`.
-  - Um Pipe (`@UsePipes`) é um simples middleware que faz operações antes do 
+  - Um Pipe (`@UsePipes`) é um simples middleware que faz operações antes do
     processamento do controller ou outro tipo de arquivo;
   - `@UseGuards` aparentemente são como pipes que você usa para autenticação;
 - Veja dois jeitos de usar os pipes para validar body:
+
   - Em um, uso o `@UsePipes`:
     - ```vim
         @Post()
@@ -316,21 +327,23 @@
         }
       ```
   - Noutro caso, posso usar dentro do decorator `@Body`:
-      - ```vim
-        const bodyValidationPipe = new ZodValidationPipe(createQuestionBodySchema)
 
-        @Controller('/questions')
-        @UseGuards(JwtAuthGuard)
-        export class CreateQuestionController {
-          constructor(private prismaDependency: PrismaService) {}
+    - ```vim
+      const bodyValidationPipe = new ZodValidationPipe(createQuestionBodySchema)
 
-          @Post()
-          async handle(
-            @CurrentUser() user: UserPayloadType,
-            @Body(bodyValidationPipe) body: CreateQuestionBodyType,
-            ) { ... } 
-        }
-        ```
+      @Controller('/questions')
+      @UseGuards(JwtAuthGuard)
+      export class CreateQuestionController {
+        constructor(private prismaDependency: PrismaService) {}
+
+        @Post()
+        async handle(
+          @CurrentUser() user: UserPayloadType,
+          @Body(bodyValidationPipe) body: CreateQuestionBodyType,
+          ) { ... }
+      }
+      ```
+
 - parei no 4:40 da aula "Copiando camada de domínio"
 
 # Testando seu domínio
@@ -346,9 +359,9 @@
   auth/, arquivos app.module.ts...)
 - Em `http/` você coloca o que está relacionado a REST...controllers/ e
   pipes/, inicialmente
-- Ao mexer nas pastas assim, sempre verifica as importações e rode os 
+- Ao mexer nas pastas assim, sempre verifica as importações e rode os
   comandos de compilação TS junto aos de lint;
-- no arquivo `nest-cli.json`, já que inserimos o main dentro de infra, 
+- no arquivo `nest-cli.json`, já que inserimos o main dentro de infra,
   precisa mudar o entryfile:
   ```vim
   {
@@ -361,6 +374,3 @@
     }
   }
   ```
-
-
-
