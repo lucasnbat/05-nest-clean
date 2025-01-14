@@ -20,8 +20,11 @@ type AuthenticateStudentUseCaseResponse = Either<
 @Injectable()
 export class AuthenticateStudentUseCase {
   constructor(
+    // vai mapear para PrismaStudentsRepository (database.module.ts)
     private studentsRepository: StudentsRepository,
+    // vai mapear p/ BcryptHasher (cryptography.module.ts)
     private hashComparer: HashComparer,
+    // vai mapear p/ JwtEncrypter (cryptography.module.ts)
     private encrypter: Encrypter,
   ) {}
 

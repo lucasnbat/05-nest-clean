@@ -7,6 +7,8 @@ import { PrismaAnswersRepository } from './prisma/repositories/prisma-answers-re
 import { PrismaAnswerAttachmentsRepository } from './prisma/repositories/prisma-answer-attachments-repository'
 import { PrismaAnswerCommentsRepository } from './prisma/repositories/prisma-answer-comments-repository'
 import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository'
+import { StudentsRepository } from '@/domain/forum/application/repositories/students-repository'
+import { PrismaStudentsRepository } from './prisma/repositories/prisma-students-repository'
 
 @Module({
   providers: [
@@ -15,6 +17,7 @@ import { QuestionsRepository } from '@/domain/forum/application/repositories/que
     // PrismaQuestionsRepository no lugar. Para isso, fiz as adaptações neces-
     // sárias em questions-repository.ts transformando-a em abstract class
     { provide: QuestionsRepository, useClass: PrismaQuestionsRepository },
+    { provide: StudentsRepository, useClass: PrismaStudentsRepository },
     PrismaQuestionAttachmentsRepository,
     PrismaQuestionCommentsRepository,
     PrismaAnswersRepository,
@@ -28,6 +31,7 @@ import { QuestionsRepository } from '@/domain/forum/application/repositories/que
     // O nestjs vai entender ao olhar para o objeto de cima da chave providers
     // que ao ver QuestionsRepository ele deve usar PrismaQuestionsRepository
     QuestionsRepository,
+    StudentsRepository,
     PrismaQuestionAttachmentsRepository,
     PrismaQuestionCommentsRepository,
     PrismaAnswersRepository,

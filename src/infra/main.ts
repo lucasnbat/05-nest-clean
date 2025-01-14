@@ -4,9 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import { EnvType } from './env'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: false, // tirar logs ao iniciar servidor
-  })
+  const app = await NestFactory.create(AppModule, {})
 
   // app.get pega algum serviço (config module é um serviço do ConfigModule
   // que está no app.module.ts)
