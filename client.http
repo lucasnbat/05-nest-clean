@@ -30,8 +30,8 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "title": "Tchain",
-    "content":"TÔmi"
+    "title": "Nova pergunta - título",
+    "content":"Nova pergunta - conteúdo"
 }
 
 ###
