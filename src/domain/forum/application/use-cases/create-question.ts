@@ -25,7 +25,7 @@ type CreateQuestionUseCaseResponse = Either<
 @Injectable()
 export class CreateQuestionUseCase {
   // no lugar de QuestionsRepository é injetado o PrismaQuestionsRepository
-  // por causa das regras de http.module.ts... ele quem salva no banco
+  // por causa das regras de database.module.ts... ele quem trabalha com o banco
   constructor(private questionsRepository: QuestionsRepository) {}
 
   async execute({

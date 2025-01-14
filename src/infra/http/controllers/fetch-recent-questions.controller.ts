@@ -1,8 +1,8 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { z } from 'zod'
+import { FetchRecentQuestionsUseCase } from '@/domain/forum/application/use-cases/fetch-recent-questions'
 
 const pageQueryParamsSchema = z
   .string()
@@ -23,23 +23,12 @@ const queryValidationPipe = new ZodValidationPipe(pageQueryParamsSchema)
 // atualizei para usar uma classe JwtAuthGuard que instancia um AuthGuard('jwt')
 @UseGuards(JwtAuthGuard)
 export class FetchRecentQuestionsController {
-  constructor(private prismaDependency: PrismaService) {}
+  constructor(private fetchRecentQuestions: FetchRecentQuestionsUseCase) {}
 
   @Get()
   async handle(@Query('page', queryValidationPipe) page: PageQueryParamType) {
-    /* 
-     * Se tá na página 1, não pula nada e mostra apenas a pergunta mais recente 
-    (lembre: é uma por página). 
-     * Se tá na página 2, pula uma (a primeira mais recente) e mostra a segunda,
-    que é a segunda pergunta mais recente 
-     */
-    const perPage = 20
-    const questions = await this.prismaDependency.question.findMany({
-      take: perPage,
-      skip: (page - 1) * perPage,
-      orderBy: {
-        createAt: 'desc', // ordena das mais recentes para mais antigas
-      },
+    const questions = await this.fetchRecentQuestions.execute({
+      page,
     })
 
     return { questions }
