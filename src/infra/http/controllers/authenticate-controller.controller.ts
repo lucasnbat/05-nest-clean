@@ -1,7 +1,15 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common'
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  UnauthorizedException,
+  UsePipes,
+} from '@nestjs/common'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student'
+import { WrongCredentialsError } from '@/domain/forum/application/use-cases/errors/wrong-credentials-error'
 
 const authenticateBodySchema = z.object({
   email: z.string().email(),
@@ -27,7 +35,18 @@ export class AuthenticateController {
     })
 
     if (result.isLeft()) {
-      throw new Error()
+      const error = result.value
+
+      // pega a classe retornada pelo isLeft() do caso de uso
+      switch (error.constructor) {
+        // se for classe de credenciais erradas...
+        case WrongCredentialsError:
+          // dispara um erro que é status code 401 pro nestjs
+          throw new UnauthorizedException(error.message)
+        default:
+          // se não dispara esse BadRequestException que é status code 400
+          throw new BadRequestException(error.message)
+      }
     }
 
     const { accessToken } = result.value

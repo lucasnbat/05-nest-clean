@@ -1,4 +1,10 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common'
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+} from '@nestjs/common'
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import { UserPayloadType } from '@/infra/auth/jwt.strategy'
@@ -32,15 +38,19 @@ export class CreateQuestionController {
     const { content, title } = body
     const userId = user.sub
 
-    await this.createQuestion.execute({
+    const result = await this.createQuestion.execute({
       title,
       content,
       authorId: userId,
       attachmentsIds: [],
     })
+
     // aparentemente é possível buscar o user porque é uma rota autenticada
     // então o sistema de módulos extrai o user a partir do token
     // console.log(user.sub)
-    return 'ok'
+
+    if (result.isLeft()) {
+      throw new BadRequestException()
+    }
   }
 }

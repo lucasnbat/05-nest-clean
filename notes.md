@@ -419,3 +419,6 @@
     escrita dos testes dos casos de uso (e conforme escreve os testes, imple-
     mentam os factories e os in-memory-repos que são stubs dos repositórios
     reais do prisma)
+  - Dessa forma, o fluxo é:
+    - bate na rota -> bate no controller -> bate no caso de uso -> chama 
+      entidades, contratos, etc. -> devolve para controller passar a resposta

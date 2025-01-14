@@ -1,7 +1,16 @@
-import { Body, Controller, HttpCode, Post, UsePipes } from '@nestjs/common'
+import {
+  BadRequestException,
+  Body,
+  ConflictException,
+  Controller,
+  HttpCode,
+  Post,
+  UsePipes,
+} from '@nestjs/common'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { RegisterStudentUseCase } from '@/domain/forum/application/use-cases/register-student'
+import { StudentAlreadyExistsError } from '@/domain/forum/application/use-cases/errors/student-already-exists-error'
 
 const createAccountBodySchema = z.object({
   name: z.string(),
@@ -29,9 +38,19 @@ export class CreateAccountController {
       email,
       password,
     })
-
     if (result.isLeft()) {
-      throw new Error()
+      const error = result.value
+
+      // pega a classe retornada pelo isLeft() do caso de uso
+      switch (error.constructor) {
+        // se for classe de aluno já existente..
+        case StudentAlreadyExistsError:
+          // dispara um erro que é status code 409 pro nestjs
+          throw new ConflictException(error.message)
+        default:
+          // se não dispara esse BadRequestException que é status code 400
+          throw new BadRequestException(error.message)
+      }
     }
   }
 }
