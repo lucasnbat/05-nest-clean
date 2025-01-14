@@ -1,13 +1,9 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Question } from '../../enterprise/entities/question'
-import { QuestionsRepository } from '../repositories/questions-repository'
-import { Either, right } from '@/core/either'
-import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
-import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
+import { Either, left, right } from '@/core/either'
 import { Injectable } from '@nestjs/common'
 import { Student } from '../../enterprise/entities/student'
 import { StudentsRepository } from '../repositories/students-repository'
 import { HashGenerator } from '../cryptography/hasher-generator'
+import { StudentAlreadyExistsError } from './errors/student-already-exists-error'
 
 interface RegisterStudentUseCaseRequest {
   name: string
@@ -16,18 +12,14 @@ interface RegisterStudentUseCaseRequest {
 }
 
 type RegisterStudentUseCaseResponse = Either<
-  null,
+  StudentAlreadyExistsError,
   {
     student: Student
   }
 >
 
-// Injectable aqui NÃO É O IDEAL. Você deveria seguir o que está escrito
-// no arquivo nest-create-question-use-case
 @Injectable()
 export class RegisterStudentUseCase {
-  // no lugar de QuestionsRepository é injetado o PrismaQuestionsRepository
-  // por causa das regras de database.module.ts... ele quem trabalha com o banco
   constructor(
     private studentsRepository: StudentsRepository,
     private hashGenerator: HashGenerator,
@@ -41,10 +33,22 @@ export class RegisterStudentUseCase {
     const studentWithSameEmail =
       await this.studentsRepository.findByEmail(email)
 
-    if (!studentWithSameEmail) {
+    if (studentWithSameEmail) {
+      return left(new StudentAlreadyExistsError(email))
     }
+
+    const hashedPassword = await this.hashGenerator.hash(password)
+
+    const student = Student.create({
+      name,
+      email,
+      password: hashedPassword,
+    })
+
+    await this.studentsRepository.create(student)
+
     return right({
-      question,
+      student,
     })
   }
 }

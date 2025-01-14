@@ -398,3 +398,7 @@
     - Seria algo como separar a classe Hasher {} que serve como contrato em
       `hasher.ts` em dois contratos: um para hash e outro para compare
   - Dependency Inversion
+- Esclarecendo:
+  - hashGenerator = gera hash de senha ao criar usuário
+  - hashComparer = compara senhas para permitir login
+  - encrypt = gera o token para acesso (caso de uso de login/autenticação)

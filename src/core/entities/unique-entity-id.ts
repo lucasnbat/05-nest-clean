@@ -8,27 +8,27 @@
 // inclusive você vai poder usar essa classe em qualquer
 // atributo das suas entities que estão na pasta entities/
 
-import { randomUUID } from "node:crypto";
+import { randomUUID } from 'node:crypto'
 
 export class UniqueEntityID {
-  private value: string;
+  private value: string
 
   // dois métodos públicos que retornam o value
   toString() {
-    return this.value;
+    return this.value
   }
 
   toValue() {
-    return this.value;
+    return this.value
   }
 
   constructor(value?: string) {
-    this.value = value ?? randomUUID();
+    this.value = value ?? randomUUID()
   }
 
   // valida se o id recebido na função é o mesmo id da classe atual
   // (this)
   equals(id: UniqueEntityID) {
-    return id.toValue() === this.value;
+    return id.toValue() === this.value
   }
 }
