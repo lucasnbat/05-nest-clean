@@ -378,3 +378,23 @@
 
 - São utilitários que convertem entidades do formato de uma camada
   para o formato de outra camada;
+
+# Gateways de criptografia
+
+- É bom que tenhamos o módulo de criptografia na camada de infra.;
+- DUMP:
+  - DDD;
+  - Clean Arch;
+  - SOLID + Patterns (Repository Pattern)
+- SOLID:
+  - Single Responsibility
+  - Open Closed Principle
+  - Liskov
+  - Interface Segregation = separar bem as interfaces/contratos
+    - Impressora tem 3 contratos:
+      - Impressora
+      - Copiadora
+      - Scanner
+    - Seria algo como separar a classe Hasher {} que serve como contrato em
+      `hasher.ts` em dois contratos: um para hash e outro para compare
+  - Dependency Inversion
