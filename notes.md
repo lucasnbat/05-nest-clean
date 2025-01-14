@@ -402,3 +402,20 @@
   - hashGenerator = gera hash de senha ao criar usuário
   - hashComparer = compara senhas para permitir login
   - encrypt = gera o token para acesso (caso de uso de login/autenticação)
+
+# Veja como foi o processo de implementação da criptografia
+
+- Criação dos contratos em `aplication/` (mesma pasta dos respositories/,
+  pois como explicado, a criptografia também precisa de um gateway para
+  comunicação entre infra e casos de uso)
+- Depois criação de casos de uso utilizando os contratos;
+- Criação dos stubs de teste;
+- Criação dos testes;
+- Implementação real dos módulos em nestjs na camada de infra
+- Isso é análogo a todo o processo que passamos com outros módulos:
+  - Escrita do DDD;
+  - Escrita das entidades (camada enterprise), dos repositórios (contratos)
+    na parte de domain/forum/application/, depois escrita dos casos de uso,
+    escrita dos testes dos casos de uso (e conforme escreve os testes, imple-
+    mentam os factories e os in-memory-repos que são stubs dos repositórios
+    reais do prisma)
