@@ -11,8 +11,12 @@ import { HttpModule } from './http/http.module'
       validate: (env) => envSchema.parse(env),
       isGlobal: true,
     }),
+    // como ele importa o módulo auth aqui, não precisa fazer isso no http
+    // module
     AuthModule,
-    HttpModule, // contendo todos os controllers
+    // contendo todos os controllers, com importações de database module e
+    // crytography module
+    HttpModule,
   ],
 })
 export class AppModule {}
