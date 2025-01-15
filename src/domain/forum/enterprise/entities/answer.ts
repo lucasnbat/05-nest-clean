@@ -10,7 +10,7 @@ export interface AnswerProps {
   questionId: UniqueEntityID
   attachments: AnswerAttachmentList
   createdAt: Date
-  updatedAt?: Date // para inserir flag de "editada" na resposta
+  updatedAt?: Date | null // para inserir flag de "editada" na resposta
 }
 
 // passando a interface AnswerProps como generic, estou dizendo que a classe
