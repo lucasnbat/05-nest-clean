@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { ConfigService } from '@nestjs/config'
-import { EnvType } from './env'
+import { EnvService } from './env/env.service'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {})
@@ -11,16 +10,11 @@ async function bootstrap() {
   // aparentemente é um plugin automático disponibilizado ao importar o módulo
   // ConfigModule.forRoot()
 
-  // dentro do generic de ConfigService você passa primeiro a tipagem
-  // depois se já foi validado ou não. coloca true para sinalizar que já validou
-  // que a portal não vai ser undefined (o que é verdade, porque em ultimo caso
-  // ela sempre será o valor padrão 3333)
-  const configService = app.get<ConfigService<EnvType, true>>(ConfigService)
+  // invoca o EnvService que retorna as var ambiente com infer:true
+  const envService = app.get(EnvService)
 
-  // usa o plugin para pegar a var. ambiente PORT
-  const port = configService.get('PORT', {
-    infer: true,
-  })
+  // usa o serviço para pegar uma variavel e setar em const port;
+  const port = envService.get('PORT')
 
   await app.listen(port)
 }

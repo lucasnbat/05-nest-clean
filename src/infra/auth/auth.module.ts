@@ -2,13 +2,13 @@
 // para haver a geração do token em outro lugar (authenticate-controller)
 
 import { Module } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
-import { EnvType } from '@/infra/env'
 import { JwtStrategy } from './jwt.strategy'
 import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './jwt-auth.guard'
+import { EnvService } from '../env/env.service'
+import { EnvModule } from '../env/env.module'
 
 @Module({
   imports: [
@@ -20,13 +20,14 @@ import { JwtAuthGuard } from './jwt-auth.guard'
     // chamar toda essa maquinaria do auth.module.ts aqui embaixo
     JwtModule.registerAsync({
       // injeta o ConfigService, pois vamos usar ele para buscar var ambiente
-      inject: [ConfigService],
+      imports: [EnvModule],
+      inject: [EnvService],
       global: true,
       // invoca uma função que chama o config service via var config e pega a var
-      useFactory(config: ConfigService<EnvType, true>) {
+      useFactory(env: EnvService) {
         // keys em base64
-        const privateKey = config.get('JWT_PRIVATE_KEY', { infer: true })
-        const publicKey = config.get('JWT_PUBLIC_KEY', { infer: true })
+        const privateKey = env.get('JWT_PRIVATE_KEY')
+        const publicKey = env.get('JWT_PUBLIC_KEY')
 
         return {
           // usamos o algoritmo rs256, depois codificamos para base64 (nos outros arquivos que fizemos isso)
@@ -45,6 +46,7 @@ import { JwtAuthGuard } from './jwt-auth.guard'
       useClass: JwtAuthGuard, // nossa classe de guard
     },
     JwtStrategy,
+    EnvService,
   ],
 })
 export class AuthModule {}

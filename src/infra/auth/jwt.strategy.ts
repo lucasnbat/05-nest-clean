@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 import { ExtractJwt, Strategy } from 'passport-jwt'
-import { EnvType } from '@/infra/env'
 import { z } from 'zod'
+import { EnvService } from '../env/env.service'
 
 const userPayloadSchema = z.object({
   sub: z.string().uuid(),
@@ -22,12 +21,12 @@ export type UserPayloadType = z.infer<typeof userPayloadSchema>
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   // aqui importamos a var config contendo a tipagem do nosso .env
-  constructor(config: ConfigService<EnvType, true>) {
+  constructor(config: EnvService) {
     // usamos a var para pegar a cahve publica;
     // lembre: esse arquivo valida se o usuário está logado, então apenas
     // precisamos DECODIFICAR um token, e não gerar um. Logo, basta a chave
     // publica.
-    const publicKey = config.get('JWT_PUBLIC_KEY', { infer: true })
+    const publicKey = config.get('JWT_PUBLIC_KEY')
 
     // chama o constructor de PassportStrategy
     super({
