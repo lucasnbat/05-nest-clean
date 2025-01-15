@@ -27,6 +27,7 @@ model User {
 
   questions Question[]
   answers   Answer[]
+  comments  Comment[]
 
   @@map("users")
 }
@@ -45,7 +46,9 @@ model Question {
   bestAnswer   Answer? @relation("bestAnswer", fields: [bestAnswerId], references: [id])
   bestAnswerId String? @unique @map("best_answer_id")
 
-  answers Answer[]
+  answers     Answer[]
+  comments    Comment[]
+  attachments Attachment[]
 
   @@map("questions")
 }
@@ -61,8 +64,46 @@ model Answer {
 
   bestAnswerOn Question? @relation("bestAnswer")
 
-  question   Question? @relation(fields: [questionId], references: [id])
-  questionId String    @map("question_id")
+  question    Question?    @relation(fields: [questionId], references: [id])
+  questionId  String       @map("question_id")
+  comments    Comment[]
+  attachments Attachment[]
 
   @@map("answers")
+}
+
+model Comment {
+  id       String    @id @default(uuid())
+  content  String
+  createAt DateTime  @default(now()) @map("created_at")
+  updateAt DateTime? @updatedAt @map("updated_at")
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String @map("author_id")
+
+  // se for comment de pergunta, só o questionId estará preenchido
+  question   Question? @relation(fields: [questionId], references: [id])
+  questionId String?   @map("question_id")
+
+  // se for comment de resposta, só o answerId estará preenchido
+  answer   Answer? @relation(fields: [answerId], references: [id])
+  answerId String? @map("answer_id")
+
+  @@map("comments")
+}
+
+model Attachment {
+  id    String @id @default(uuid())
+  title String
+  url   String
+
+  // se for attchament de pergunta, só o questionId estará preenchido
+  question   Question? @relation(fields: [questionId], references: [id])
+  questionId String?   @map("question_id")
+
+  // se for attchament de resposta, só o answerId estará preenchido
+  answer   Answer? @relation(fields: [answerId], references: [id])
+  answerId String? @map("answer_id")
+
+  @@map("attachments")
 }
