@@ -9,8 +9,6 @@ import { FetchRecentQuestionsUseCase } from '@/domain/forum/application/use-case
 import { RegisterStudentUseCase } from '@/domain/forum/application/use-cases/register-student'
 import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student'
 import { CryptographyModule } from '../cryptography/cryptography.module'
-import { APP_GUARD } from '@nestjs/core'
-import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 
 @Module({
   // importa o database module com o prisma service
