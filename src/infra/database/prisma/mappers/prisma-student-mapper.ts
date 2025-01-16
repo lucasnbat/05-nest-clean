@@ -1,5 +1,4 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Question } from '@/domain/forum/enterprise/entities/question'
 import { Student } from '@/domain/forum/enterprise/entities/student'
 import { User as PrismaUser, Prisma } from '@prisma/client'
 
