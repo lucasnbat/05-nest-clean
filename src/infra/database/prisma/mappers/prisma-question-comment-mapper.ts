@@ -4,14 +4,14 @@ import { Comment as PrismaComment, Prisma } from '@prisma/client'
 
 export class PrismaQuestionCommentMapper {
   static toDomain(raw: PrismaComment): QuestionComment {
-    if (!raw.answerId) {
+    if (!raw.questionId) {
       throw new Error('invalid comment type.')
     }
     return QuestionComment.create(
       {
         content: raw.content,
         authorId: new UniqueEntityID(raw.authorId),
-        questionId: new UniqueEntityID(raw.answerId),
+        questionId: new UniqueEntityID(raw.questionId),
         createdAt: raw.createAt,
         updatedAt: raw.updateAt,
       },
