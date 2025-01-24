@@ -428,3 +428,5 @@
 - É razoável pensar que os principais locais onde EnvModule e EnvService são 
   importados são os arquivos onde há uso de variáveis ambiente:
     - `auth.module.ts` (arquivos jwt usam), `app.module.ts` (`main.ts` usa)
+
+# 
