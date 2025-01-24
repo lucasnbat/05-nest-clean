@@ -1,21 +1,24 @@
 import { AppModule } from '@/infra/app.module'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
-import { hash } from 'bcryptjs'
 import request from 'supertest'
+import { StudentFactory } from 'test/factories/make-student'
 
 describe('Create question (e2e)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
+  let studentFactory: StudentFactory
 
   // isso é a função de inicialização do app http nest
   beforeAll(async () => {
     // cria um módulo de teste ligado ao módulo da aplicação
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, DatabaseModule],
+      providers: [StudentFactory],
     }).compile()
 
     // cria a aplicação nest a partir do moduleRef e associa para a var app
@@ -29,6 +32,7 @@ describe('Create question (e2e)', () => {
 
     // instancia o jwtService, que ele quem cria o token para você (função sign())
     jwt = moduleRef.get(JwtService)
+    studentFactory = moduleRef.get(StudentFactory)
 
     // inicializa o app em uma porta diferente da porta oficial
     // esse app funcionará apenas para os testes
@@ -36,16 +40,10 @@ describe('Create question (e2e)', () => {
   })
 
   test('[POST] /questions', async () => {
-    const user = await prisma.user.create({
-      data: {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        password: await hash('123123', 8), // gera o hash da senha
-      },
-    })
+    const user = await studentFactory.makePrismaStudent()
 
     // gera access token com nossa instancia jwt passando o user.id como subject
-    const accessToken = jwt.sign({ sub: user.id })
+    const accessToken = jwt.sign({ sub: user.id.toString() })
 
     const response = await request(app.getHttpServer())
       .post('/questions')

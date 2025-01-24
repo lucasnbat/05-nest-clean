@@ -3,9 +3,9 @@ import {
   Question,
   QuestionProps,
 } from '@/domain/forum/enterprise/entities/question'
-import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
 import { PrismaQuestionMapper } from '@/infra/database/prisma/mappers/prisma-question-mapper'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { faker } from '@faker-js/faker'
 import { Injectable } from '@nestjs/common'
 
 // override: recebe a versão de QuestionProps onde todos os dados
@@ -17,10 +17,10 @@ export function makeQuestion(
 ) {
   const question = Question.create(
     {
-      title: 'Example question',
-      slug: Slug.create('example-question'),
+      title: faker.lorem.sentence(),
+      // slug: Slug.create('example-question'),
       authorId: new UniqueEntityID(),
-      content: 'Example content',
+      content: faker.lorem.text(),
       ...override, // sobrescreve com a chave/valor que foi recebida no makeQuestion()
     },
     id, // retorna o id manual (se foi passado)

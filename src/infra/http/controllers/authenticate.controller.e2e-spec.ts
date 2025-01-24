@@ -1,19 +1,23 @@
 import { AppModule } from '@/infra/app.module'
+import { DatabaseModule } from '@/infra/database/database.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import { hash } from 'bcryptjs'
 import request from 'supertest'
+import { StudentFactory } from 'test/factories/make-student'
 
 describe('Authenticate (e2e)', () => {
   let app: INestApplication
   let prisma: PrismaService
+  let studentFactory: StudentFactory
 
   // isso é a função de inicialização do app http nest
   beforeAll(async () => {
     // cria um módulo de teste ligado ao módulo da aplicação
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, DatabaseModule],
+      providers: [StudentFactory],
     }).compile()
 
     // cria a aplicação nest a partir do moduleRef e associa para a var app
@@ -24,6 +28,7 @@ describe('Authenticate (e2e)', () => {
      * AppModule
      */
     prisma = moduleRef.get(PrismaService)
+    studentFactory = moduleRef.get(StudentFactory)
 
     // inicializa o app em uma porta diferente da porta oficial
     // esse app funcionará apenas para os testes
@@ -32,12 +37,9 @@ describe('Authenticate (e2e)', () => {
 
   test('[POST] /sessions', async () => {
     // criar usuario que sera usado
-    await prisma.user.create({
-      data: {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        password: await hash('123123', 8), // gera o hash da senha
-      },
+    await studentFactory.makePrismaStudent({
+      email: 'johndoe@example.com',
+      password: await hash('123123', 8),
     })
 
     const response = await request(app.getHttpServer()).post('/sessions').send({
