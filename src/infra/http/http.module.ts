@@ -15,6 +15,8 @@ import { EditQuestionController } from './controllers/edit-question.controller'
 import { EditQuestionUseCase } from '@/domain/forum/application/use-cases/edit-question'
 import { DeleteQuestionController } from './controllers/delete-question.controller'
 import { DeleteQuestionUseCase } from '@/domain/forum/application/use-cases/delete-question'
+import { AnswerQuestionController } from './controllers/answer-question.controller'
+import { AnswerQuestionUseCase } from '@/domain/forum/application/use-cases/answer-question'
 
 @Module({
   // importa o database module com o prisma service
@@ -30,6 +32,7 @@ import { DeleteQuestionUseCase } from '@/domain/forum/application/use-cases/dele
     GetQuestionBySlugController,
     EditQuestionController,
     DeleteQuestionController,
+    AnswerQuestionController,
   ],
   // lembre que optamos pelo trade-off:
   providers: [
@@ -40,6 +43,7 @@ import { DeleteQuestionUseCase } from '@/domain/forum/application/use-cases/dele
     GetQuestionBySlugUseCase,
     EditQuestionUseCase,
     DeleteQuestionUseCase,
+    AnswerQuestionUseCase,
   ],
 })
 export class HttpModule {}
