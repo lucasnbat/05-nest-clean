@@ -1,14 +1,15 @@
-import { PaginationParams } from "@/core/repositories/pagination-params";
-import { Answer } from "@/domain/forum/enterprise/entities/answer";
+import { PaginationParams } from '@/core/repositories/pagination-params'
+import { Answer } from '@/domain/forum/enterprise/entities/answer'
 
-export interface AnswersRepository {
+export abstract class AnswersRepository {
   // recebe o objeto answer para gravar no banco
-  create(answer: Answer): Promise<void>;
-  findById(id: string): Promise<Answer | null>;
-  findManyByQuestionId(
+  abstract create(answer: Answer): Promise<void>
+  abstract findById(id: string): Promise<Answer | null>
+  abstract findManyByQuestionId(
     questionId: string,
     params: PaginationParams,
-  ): Promise<Answer[]>;
-  save(answer: Answer): Promise<void>;
-  delete(answer: Answer): Promise<void>;
+  ): Promise<Answer[]>
+
+  abstract save(answer: Answer): Promise<void>
+  abstract delete(answer: Answer): Promise<void>
 }

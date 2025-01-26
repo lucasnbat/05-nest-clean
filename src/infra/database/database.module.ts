@@ -9,6 +9,11 @@ import { PrismaAnswerCommentsRepository } from './prisma/repositories/prisma-ans
 import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository'
 import { StudentsRepository } from '@/domain/forum/application/repositories/students-repository'
 import { PrismaStudentsRepository } from './prisma/repositories/prisma-students-repository'
+import { QuestionAttachmentsRepository } from '@/domain/forum/application/repositories/question-attachments-repository'
+import { QuestionCommentsRepository } from '@/domain/forum/application/repositories/question-comments-repository'
+import { AnswersRepository } from '@/domain/forum/application/repositories/answers-repository'
+import { AnswerAttachmentsRepository } from '@/domain/forum/application/repositories/answer-attachments-repository'
+import { AnswerCommentsRepository } from '@/domain/forum/application/repositories/answer-comments-repository'
 
 @Module({
   providers: [
@@ -18,11 +23,23 @@ import { PrismaStudentsRepository } from './prisma/repositories/prisma-students-
     // sárias em questions-repository.ts transformando-a em abstract class
     { provide: QuestionsRepository, useClass: PrismaQuestionsRepository },
     { provide: StudentsRepository, useClass: PrismaStudentsRepository },
-    PrismaQuestionAttachmentsRepository,
-    PrismaQuestionCommentsRepository,
-    PrismaAnswersRepository,
-    PrismaAnswerAttachmentsRepository,
-    PrismaAnswerCommentsRepository,
+    {
+      provide: QuestionAttachmentsRepository,
+      useClass: PrismaQuestionAttachmentsRepository,
+    },
+    {
+      provide: QuestionCommentsRepository,
+      useClass: PrismaQuestionCommentsRepository,
+    },
+    { provide: AnswersRepository, useClass: PrismaAnswersRepository },
+    {
+      provide: AnswerAttachmentsRepository,
+      useClass: PrismaAnswerAttachmentsRepository,
+    },
+    {
+      provide: AnswerCommentsRepository,
+      useClass: PrismaAnswerCommentsRepository,
+    },
   ],
   // necessário para o http.module.ts acessar e passar para controllers
   exports: [
@@ -32,11 +49,11 @@ import { PrismaStudentsRepository } from './prisma/repositories/prisma-students-
     // que ao ver QuestionsRepository ele deve usar PrismaQuestionsRepository
     QuestionsRepository,
     StudentsRepository,
-    PrismaQuestionAttachmentsRepository,
-    PrismaQuestionCommentsRepository,
-    PrismaAnswersRepository,
-    PrismaAnswerAttachmentsRepository,
-    PrismaAnswerCommentsRepository,
+    QuestionAttachmentsRepository,
+    QuestionCommentsRepository,
+    AnswersRepository,
+    AnswerAttachmentsRepository,
+    AnswerCommentsRepository,
   ],
 })
 export class DatabaseModule {}
