@@ -1,11 +1,12 @@
-import { Either, left, right } from "@/core/either";
-import { AnswerCommentsRepository } from "../repositories/answer-comments-repository";
-import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
-import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
+import { Either, left, right } from '@/core/either'
+import { AnswerCommentsRepository } from '../repositories/answer-comments-repository'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found-error'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { Injectable } from '@nestjs/common'
 
 interface DeleteAnswerCommentUseCaseRequest {
-  authorId: string; // garantir que apenas autor do comenta´rio possa deletar
-  answerCommentId: string;
+  authorId: string // garantir que apenas autor do comenta´rio possa deletar
+  answerCommentId: string
 }
 
 // tipa que a resposta vai ser ou um erro (left) que pode ser
@@ -14,8 +15,9 @@ interface DeleteAnswerCommentUseCaseRequest {
 type DeleteAnswerCommentUseCaseResponse = Either<
   ResourceNotFoundError | NotAllowedError,
   null
->;
+>
 
+@Injectable()
 export class DeleteAnswerCommentUseCase {
   constructor(private answerCommentsRepository: AnswerCommentsRepository) {}
 
@@ -25,20 +27,20 @@ export class DeleteAnswerCommentUseCase {
   }: DeleteAnswerCommentUseCaseRequest): Promise<DeleteAnswerCommentUseCaseResponse> {
     // encontra o comentário da resposta
     const answerComment =
-      await this.answerCommentsRepository.findById(answerCommentId);
+      await this.answerCommentsRepository.findById(answerCommentId)
 
     if (!answerComment) {
-      return left(new ResourceNotFoundError());
+      return left(new ResourceNotFoundError())
     }
 
     // verifica se é o autor do comentário
     if (answerComment.authorId.toString() !== authorId) {
-      return left(new NotAllowedError());
+      return left(new NotAllowedError())
     }
 
     // se for o autor do comentário, permite deletar
-    await this.answerCommentsRepository.delete(answerComment);
+    await this.answerCommentsRepository.delete(answerComment)
 
-    return right(null);
+    return right(null)
   }
 }
