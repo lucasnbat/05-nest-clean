@@ -491,4 +491,6 @@
     ```
   - Depois você precisa instalar o sdk da amazon (cloudflare usa isso tb):
     - `npm i @aws-sdk/client-s3`
+  - O link de endpoint que você vai colocar dentro do client você encontra
+    em "settings" dentro do painel do bucket
   

@@ -9,7 +9,9 @@ export class R2Storage implements Uploader {
   private client: S3Client
 
   constructor() {
-    this.client = new S3Client({})
+    this.client = new S3Client({
+      endpoint: 'https://adklfajfdlskdfjslkdfsl/nome-do-bucket',
+    })
   }
 
   upload({ body, fileName, fileType }: UploadParams): Promise<{ url: string }> {
