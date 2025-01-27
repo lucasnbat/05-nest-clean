@@ -436,3 +436,11 @@
 - O NestJS por padrão usa o express, portanto para nós fazermos uploads
   de arquivos precisaremos do multer. O multer não funciona em FastifyJS;
 - `npm install @types/multer -D`
+- Adicione "multer" no types do `tsconfig.json`:
+  ```vim
+    "types": ["vitest/globals", "multer"]
+  ```
+- Configure a rota
+  - Isso envolve:
+    - `@UseInterceptors(FileInterceptor('file'))` acima da rota
+    - `async handle(@UploadedFile() file: Express.Multer.File) {}` no handle;
