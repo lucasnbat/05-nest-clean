@@ -41,7 +41,7 @@ export class PrismaAnswersRepository implements AnswersRepository {
         questionId,
       },
       orderBy: {
-        createAt: 'desc',
+        createdAt: 'desc',
       },
       take: 20,
       skip: (page - 1) * 20,

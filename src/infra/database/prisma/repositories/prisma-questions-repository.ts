@@ -51,7 +51,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   async findManyRecent({ page }: PaginationParams): Promise<Question[]> {
     const questions = await this.prisma.question.findMany({
       orderBy: {
-        createAt: 'desc',
+        createdAt: 'desc',
       },
       take: 20, // pegue sempre 20 itens
       skip: (page - 1) * 20, // sempre pulando de 20 em 20 conforme a page (1,2...)

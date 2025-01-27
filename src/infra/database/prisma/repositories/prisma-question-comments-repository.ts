@@ -43,7 +43,7 @@ export class PrismaQuestionCommentsRepository
         questionId,
       },
       orderBy: {
-        createAt: 'desc',
+        createdAt: 'desc',
       },
       take: 20,
       skip: (page - 1) * 20,

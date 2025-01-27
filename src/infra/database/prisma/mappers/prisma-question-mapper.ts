@@ -25,8 +25,8 @@ export class PrismaQuestionMapper {
           ? new UniqueEntityID(raw.bestAnswerId)
           : null,
         slug: Slug.create(raw.slug),
-        createdAt: raw.createAt,
-        updatedAt: raw.updateAt,
+        createdAt: raw.createdAt,
+        updatedAt: raw.updatedAt,
       },
       new UniqueEntityID(raw.id),
     )
@@ -42,8 +42,8 @@ export class PrismaQuestionMapper {
       title: question.title,
       content: question.content,
       slug: question.slug.value,
-      createAt: question.createdAt,
-      updateAt: question.updatedAt,
+      createdAt: question.createdAt,
+      updatedAt: question.updatedAt,
     }
   }
 }

@@ -37,8 +37,8 @@ model Question {
   title    String
   slug     String    @unique
   content  String
-  createAt DateTime  @default(now()) @map("created_at")
-  updateAt DateTime? @updatedAt @map("updated_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @map("author_id")
@@ -56,8 +56,8 @@ model Question {
 model Answer {
   id       String    @id @default(uuid())
   content  String
-  createAt DateTime  @default(now()) @map("created_at")
-  updateAt DateTime? @updatedAt @map("updated_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @map("author_id")
@@ -75,8 +75,8 @@ model Answer {
 model Comment {
   id       String    @id @default(uuid())
   content  String
-  createAt DateTime  @default(now()) @map("created_at")
-  updateAt DateTime? @updatedAt @map("updated_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @map("author_id")
