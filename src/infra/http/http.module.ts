@@ -33,6 +33,8 @@ import { CommentOnAnswerUseCase } from '@/domain/forum/application/use-cases/com
 import { CommentOnAnswerController } from './controllers/comment-on-answer.controller'
 import { DeleteAnswerCommentController } from './controllers/delete-answer-comment.controller'
 import { DeleteAnswerCommentUseCase } from '@/domain/forum/application/use-cases/delete-answer-comment'
+import { FetchQuestionCommentsUseCase } from '@/domain/forum/application/use-cases/fetch-question-comments'
+import { FetchQuestionCommentsController } from './controllers/fetch-question-comments.controller'
 
 @Module({
   // importa o database module com o prisma service
@@ -57,6 +59,7 @@ import { DeleteAnswerCommentUseCase } from '@/domain/forum/application/use-cases
     DeleteQuestionCommentController,
     CommentOnAnswerController,
     DeleteAnswerCommentController,
+    FetchQuestionCommentsController,
   ],
   // lembre que optamos pelo trade-off:
   providers: [
@@ -76,6 +79,7 @@ import { DeleteAnswerCommentUseCase } from '@/domain/forum/application/use-cases
     DeleteQuestionCommentUseCase,
     CommentOnAnswerUseCase,
     DeleteAnswerCommentUseCase,
+    FetchQuestionCommentsUseCase,
   ],
 })
 export class HttpModule {}
