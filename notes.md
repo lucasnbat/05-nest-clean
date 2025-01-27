@@ -444,3 +444,51 @@
   - Isso envolve:
     - `@UseInterceptors(FileInterceptor('file'))` acima da rota
     - `async handle(@UploadedFile() file: Express.Multer.File) {}` no handle;
+
+# Sobre integração com cloudflare
+
+- S3:
+  - Sistema de armazenamento robusto;
+  - Exige cartão para começar;
+  - Cobra taxa por upload e por download (a cada usuário que for baixar, tem
+    um valor cobrado);
+
+# Passos no cloudflare (documentação)
+
+- Dentro da página "Create bucket" você dá um nome para o novo bucket, deixa
+  a região como automatic e "Create bucket"
+- Vai em R2 (overview) novamente e vai em "Manage API Tokens"
+- Opção Create API Token
+  - Dá nome no token
+  - Opção Object Read and Write
+  - Opção aplly to specific buckets only e seleciona o nome do seu bucket;
+  - Time to live (TTL): forever ou na duração que você deseja que,
+    ao ultrapassar, o token expire;
+  - Create API Token
+  - Copia Access Key ID e Secret Access Key
+  - Depois pega o id da sua conta (presente no painel overview) e também o 
+    nome do seu bucket
+  - Adicione tudo no `.env`:
+    ```vim
+    CLOUDFLARE_ACCOUNT_ID="suaaccountidaqui"
+    AWS_BUCKET_NAME="nomedoseubucketaqui"
+    AWS_ACCESS_KEY_ID="suachaveaqui"
+    AWS_SECRET_ACCESS_KEY="suachaveaqui"
+    ```
+  - Adicione no seu arquivo `env.ts` (deixei comentado apenas para não quebrar
+    nada...eu não integrei o cloudflare):
+    ```vim
+    export const envSchema = z.object({
+      DATABASE_URL: z.string().url(),
+      PORT: z.coerce.number().optional().default(3333),
+      JWT_PUBLIC_KEY: z.string(),
+      JWT_PRIVATE_KEY: z.string(),
+      // CLOUDFLARE_ACCOUNT_ID: z.string(),
+      // AWS_BUCKET_NAME: z.string(),
+      // AWS_ACCESS_KEY_ID: z.string(),
+      // AWS_SECRET_ACCESS_KEY: z.string(),
+    })
+    ```
+  - Depois você precisa instalar o sdk da amazon (cloudflare usa isso tb):
+    - `npm i @aws-sdk/client-s3`
+  
