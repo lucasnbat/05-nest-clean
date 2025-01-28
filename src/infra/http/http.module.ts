@@ -38,13 +38,14 @@ import { FetchQuestionCommentsController } from './controllers/fetch-question-co
 import { FetchAnswerCommentsUseCase } from '@/domain/forum/application/use-cases/fetch-answer-comments'
 import { FetchAnswerCommentsController } from './controllers/fetch-answer-comments.controller'
 import { UploadAttachmentController } from './controllers/upload-attachment.controller'
+import { StorageModule } from '../storage/storage.module'
 
 @Module({
   // importa o database module com o prisma service
   // é a partir daqui que os controllers vão ler as classes
   // de contrato e mapear para as classes em "useClass", tais
   // como PrismaStudentsRepository e BcryptHasher, por exemplo
-  imports: [DatabaseModule, CryptographyModule],
+  imports: [DatabaseModule, CryptographyModule, StorageModule],
   controllers: [
     CreateAccountController,
     AuthenticateController,

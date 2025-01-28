@@ -16,6 +16,6 @@ export class EnvService {
   // ... return this.configService.get<**T**>(key, { infer: true })
 
   get<T extends keyof EnvType>(key: T) {
-    return this.configService.get<T>(key, { infer: true })
+    return this.configService.get(key, { infer: true })
   }
 }
