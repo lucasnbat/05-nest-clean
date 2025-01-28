@@ -7,6 +7,8 @@ import { EnvModule } from './env/env.module'
 
 @Module({
   imports: [
+    // ConfigModule faz a invocação das var ambiente aqui
+    // mas esse ConfigModule no momento do curso não faz override
     ConfigModule.forRoot({
       validate: (env) => envSchema.parse(env),
       isGlobal: true,

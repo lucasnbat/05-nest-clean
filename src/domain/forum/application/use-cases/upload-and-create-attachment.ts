@@ -43,7 +43,11 @@ export class UploadAndCreateAttachmentUseCase {
       return left(new InvalidAttachmentType(fileType))
     }
 
-    // realiza o upload
+    // realiza o upload -> no caso do nosso r2-uploader, a url é o nome do arq.
+    // isso é uma operação por si só diferente do salvamento em banco
+    // o que estamos fazendo upload é o arquivo la na cloudflare
+    // o que salvaremos em banco é a referencia para esse arquivo que ficará na
+    // cloudflare
     const { url } = await this.uploader.upload({
       fileName,
       fileType,
@@ -53,14 +57,16 @@ export class UploadAndCreateAttachmentUseCase {
     // cria o objeto
     const attachment = Attachment.create({
       title: fileName,
-      url,
+      url, // o 28934623784267842-nomedoarquivo.pdf vindo do r2
     })
 
     // salva no banco (lembre que dentro do repo do prisma
     // vai haver um mapper que vai transformar o objeto de dominio
     // que criamos acima em objeto prisma)
+    // aqui estou salvando o objeto que aponta para o arquivo lá na cloudflare
     await this.attachmentsRepository.create(attachment)
 
+    // se tudo da certo ele retorna o objeto (que aponta para o arquivo na nuvem)
     return right({
       attachment,
     })

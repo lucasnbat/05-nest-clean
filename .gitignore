@@ -63,6 +63,8 @@ data/*
 
 # env
 .env
+.env.test
 
 *.pem
 *.txt
+

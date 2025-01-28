@@ -493,4 +493,30 @@
     - `npm i @aws-sdk/client-s3`
   - O link de endpoint que você vai colocar dentro do client você encontra
     em "settings" dentro do painel do bucket
+  - Existe como você limitar a quantidade de tempo que os objetos ficam no
+    bucket: vai em lifecycle rules, coloca nome, adiciona quantos dias quer
+    que os objetos permaneçam, deixa o campo de escopo vazio e adiciona;
+  - Lembre que você deve ir na chave de api que usas e colocar o nome do bucket
+    de teste lá;
+    - No projeto foi feito todo um tratamento no usando o `.env.test`:
+      ```vim
+      # Override env variables during tests
+
+      # Esse bucket possui regra de eliminar objetos apos um dia
+      AWS_BUCKET_NAME="nome-do-seu-bucket-de-teste"
+      ``` 
+    - No `setup-e2e.ts` você deve alterar a lógica de carregamento das var.
+      ambiente para que sobrescreva com o bucket de teste:
+      ```vim
+      // carrega as var. ambiente ANTES do teste pegar o ConfigModule do app.module.ts
+      // ao criar a instancia de app de teste
+      import { config } from 'dotenv'
+      import { execSync } from 'node:child_process'
+
+      // carrega as vars do .env:
+      config({ path: '.env', override: true })
+      // carrega novo arquivo e, se tiver var com mesmo nome, atualiza para o valor
+      // da var desse arquivo:
+      config({ path: '.env.test', override: true })
+      ```
   
