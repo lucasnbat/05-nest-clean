@@ -4,6 +4,22 @@ import { QuestionAttachmentsRepository } from '@/domain/forum/application/reposi
 import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository'
 import { Question } from '@/domain/forum/enterprise/entities/question'
 
+// IMPORTANTE:
+// Você PRECISA entender que aqui, o repositorio de anexos é separado
+// e tem os anexos existindo de forma pura e sem ligação até que você
+// ASSOCIE eles com uma pergunta ou resposta.
+
+// O repositório de questions aqui, ao criar uma pergunta, chama o repo
+// de anexos e cria os anexos primeiro lá na sua forma pura; ao deletar
+// anexos da pergunta, o repo de questions também chama o repo de anexos
+// e deleta os anexos de la.
+
+// É como se fossem duas prateleiras. Uma de questions e outra de anexos.
+// A prateleira de anexos pode ter anexos tanto de perguntas como de res-
+// postas...o que faz um anexo pertencer a uma pergunta ou resposta é o
+// id da pergunta ou resposta estar presente nele.
+// Se tem id de pergunta e null no campo id de resposta, é anexo de pergunta.
+
 // Repositório fake de Questions que busca simular o que uma maquinaria
 // como o prisma, typeOrm, sequelize fariam, mas numa versão apenas em
 // memória (usando vetores)
@@ -29,6 +45,13 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
   // essa função simula um prisma.question.create({}) por ex
   async create(question: Question) {
     this.items.push(question)
+
+    // cria os anexos dentro do repo de anexos
+    await this.questionAttachmentsRepository.createMany(
+      // pega os anexos da question recebida e envia para a função
+      // createMany()
+      question.attachments.getItems(),
+    )
 
     DomainEvents.dispatchEventsForAggregate(question.id)
   }
@@ -60,6 +83,16 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
 
     // e substitui pelos dados recebidos
     this.items[itemIndex] = question
+
+    // cria os anexos e salva no repo de anexos apenas os novos anexos criados
+    await this.questionAttachmentsRepository.createMany(
+      question.attachments.getNewItems(),
+    )
+
+    // deleta os anexos removidos, ou seja, vai tirar eles do repo de anexos
+    await this.questionAttachmentsRepository.deleteMany(
+      question.attachments.getRemovedItems(),
+    )
 
     DomainEvents.dispatchEventsForAggregate(question.id)
   }

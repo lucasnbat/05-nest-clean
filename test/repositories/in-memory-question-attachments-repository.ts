@@ -8,7 +8,13 @@ export class InMemoryQuestionAttachmentsRepository
     this.items.push(...attachments) // ... porque são varios attachments
   }
 
+  // recebe uma lista de anexos
   async deleteMany(attachments: QuestionAttachment[]): Promise<void> {
+    // vou pegar os itens e buscar os que são iguais aos da lista recebida
+    // depois vou inverter essa lógica e pegar apenas os elementos de de items[]
+    // que NÃO ESTÃO na lista recebida no método
+    // ou seja, no fim só fica os items que não foram atingidos pela lista
+    // de itens enviados para remoção
     const questionAttachments = this.items.filter((item) => {
       return !attachments.some((attachment) => attachment.equals(item))
     })
