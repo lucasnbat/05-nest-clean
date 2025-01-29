@@ -32,4 +32,33 @@ export class PrismaQuestionAttachmentsRepository
       },
     })
   }
+
+  async createMany(attachments: QuestionAttachment[]): Promise<void> {
+    if (attachments.length === 0) {
+      return
+    }
+
+    // associando anexos por meio da autalização do campo questionId para
+    // apontar para a questão
+    const data = PrismaQuestionAttachmentMapper.toPrismaUpdateMany(attachments)
+    await this.prisma.attachment.updateMany(data)
+  }
+
+  async deleteMany(attachments: QuestionAttachment[]): Promise<void> {
+    if (attachments.length === 0) {
+      return
+    }
+    const attachmentIds = attachments.map((attachment) => {
+      return attachment.id.toString()
+    })
+    await this.prisma.attachment.deleteMany({
+      where: {
+        // deleta todos os registros cujo id esteja na lista de ids passada
+        // para a função
+        id: {
+          in: attachmentIds,
+        },
+      },
+    })
+  }
 }

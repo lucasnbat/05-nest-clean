@@ -8,6 +8,7 @@ import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/crea
 const createQuestionBodySchema = z.object({
   title: z.string(),
   content: z.string(),
+  attachments: z.array(z.string().uuid()), // vetor de ids de anexos
 })
 
 type CreateQuestionBodyType = z.infer<typeof createQuestionBodySchema>
@@ -27,14 +28,14 @@ export class CreateQuestionController {
     @CurrentUser() user: UserPayloadType,
     @Body(bodyValidationPipe) body: CreateQuestionBodyType,
   ) {
-    const { content, title } = body
+    const { content, title, attachments } = body
     const userId = user.sub
 
     const result = await this.createQuestion.execute({
       title,
       content,
       authorId: userId,
-      attachmentsIds: [],
+      attachmentsIds: attachments,
     })
 
     // aparentemente é possível buscar o user porque é uma rota autenticada

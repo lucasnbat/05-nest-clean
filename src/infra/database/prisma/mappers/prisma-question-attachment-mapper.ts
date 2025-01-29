@@ -15,6 +15,26 @@ export class PrismaQuestionAttachmentMapper {
       new UniqueEntityID(raw.id),
     )
   }
+
+  static toPrismaUpdateMany(
+    attachments: QuestionAttachment[],
+  ): Prisma.AttachmentUpdateManyArgs {
+    const attachmentIds = attachments.map((attachment) => {
+      return attachment.id.toString()
+    })
+    return {
+      where: {
+        id: {
+          in: attachmentIds,
+        },
+      },
+      data: {
+        // associa o mesmo id de question... (pois no caso todos os anexos
+        // vao ser da questão que está sendo processada no metodo do repo)
+        questionId: attachments[0].questionId.toString(),
+      },
+    }
+  }
 }
 
 // não precisa de toPrisma() porque não tem necessidade de converter

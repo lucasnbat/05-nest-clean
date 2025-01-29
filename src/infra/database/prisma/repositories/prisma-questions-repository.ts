@@ -4,11 +4,15 @@ import { Question } from '@/domain/forum/enterprise/entities/question'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
 import { PrismaQuestionMapper } from '../mappers/prisma-question-mapper'
+import { PrismaQuestionAttachmentsRepository } from './prisma-question-attachments-repository'
 
 // pois vai ser enviado como dependency para algum construtor de outra classe
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private questionAttachmentsRepository: PrismaQuestionAttachmentsRepository,
+  ) {}
 
   async findBySlug(slug: string): Promise<Question | null> {
     const question = await this.prisma.question.findUnique({
@@ -30,6 +34,10 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     await this.prisma.question.create({
       data,
     })
+
+    await this.questionAttachmentsRepository.createMany(
+      question.attachments.getItems(),
+    )
   }
 
   async findById(id: string): Promise<Question | null> {
@@ -68,12 +76,25 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   async save(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question)
 
-    await this.prisma.question.update({
-      where: {
-        id: data.id,
-      },
-      data,
-    })
+    // o update de id, questões criadas e deleção de questões pode ser
+    // feito ao mesmo tempo, ao contrario da criação de um anexo que precisa
+    // esperar a criação da pergunta primeiro para ter o id e depois ser
+    // associado a pergunta (associação é feita dentro do caso de uso de create
+    // question)
+    await Promise.all([
+      this.prisma.question.update({
+        where: {
+          id: data.id,
+        },
+        data,
+      }),
+      this.questionAttachmentsRepository.createMany(
+        question.attachments.getNewItems(),
+      ),
+      this.questionAttachmentsRepository.deleteMany(
+        question.attachments.getRemovedItems(),
+      ),
+    ])
   }
 
   async delete(question: Question): Promise<void> {
