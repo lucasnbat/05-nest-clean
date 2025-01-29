@@ -14,6 +14,7 @@ import { EditAnswerUseCase } from '@/domain/forum/application/use-cases/edit-ans
 
 const editAnswerBodySchema = z.object({
   content: z.string(),
+  attachments: z.array(z.string().uuid()).default([]),
 })
 
 type EditAnswerBodyType = z.infer<typeof editAnswerBodySchema>
@@ -33,14 +34,14 @@ export class EditAnswerController {
     @Body(bodyValidationPipe) body: EditAnswerBodyType,
     @Param('id') answerId: string, // captura parâmetro e renomeia para questionId
   ) {
-    const { content } = body
+    const { content, attachments } = body
     const userId = user.sub
 
     const result = await this.editAnswer.execute({
       content,
       answerId,
       authorId: userId,
-      attachmentsIds: [],
+      attachmentsIds: attachments,
     })
 
     // não é necessário tratar vários erros aqui porque um erro de

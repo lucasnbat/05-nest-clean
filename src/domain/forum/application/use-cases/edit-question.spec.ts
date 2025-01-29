@@ -102,7 +102,7 @@ describe('Get Question By Slug', () => {
     expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 
-  it('should be able to edit a questionsync new and removed attachments when editing a question', async () => {
+  it('should be able to edit a question sync new and removed attachments when editing a question', async () => {
     const newQuestion = makeQuestion(
       {
         authorId: new UniqueEntityID('author-1'),

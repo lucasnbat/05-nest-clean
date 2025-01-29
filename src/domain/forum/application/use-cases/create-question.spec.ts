@@ -56,7 +56,6 @@ describe('Create question', () => {
   })
 
   it('should persist attachments when creating a new question', async () => {
-    // usa a função do caso de uso, agora carregado com o repo. fake
     const result = await sut.execute({
       authorId: '1',
       title: 'Nova pergunta',
