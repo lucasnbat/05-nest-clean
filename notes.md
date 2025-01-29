@@ -519,4 +519,18 @@
       // da var desse arquivo:
       config({ path: '.env.test', override: true })
       ```
+# Lidando com dados relacionados no front-end
+
+- Em uma listagem de preguntas faz mais sentido que todas as perguntas já
+  venham com os dados do autor, horario e titulo
+  - Seria inviavel o front requisitar uma busca no back para pegar em separado
+    cada nome de cada autor
+- Em uma visualização de resposta em especifico faz sentido ter duas
+  requisições: uma para carregar dados da pergunta e outra para carregar uma
+  primeira seção de respostas;
+- Problemas principais de REST:
+  - Overfetching: trazer informações demais, mais bytes, maior demora para
+    responder;
+  - Underfetching: fazer micro rotas numerosas, sobrecarrega o front-end fazen-
+    do ele precisar fazer muitas requisições;
   
