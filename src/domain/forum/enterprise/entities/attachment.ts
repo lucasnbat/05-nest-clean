@@ -13,7 +13,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 //   parentType: 'answer' | 'question'
 // }
 
-interface AttachmentProps {
+export interface AttachmentProps {
   title: string
   url: string
 }

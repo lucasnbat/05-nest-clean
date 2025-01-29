@@ -3,7 +3,10 @@ import {
   QuestionAttachment,
   QuestionAttachmentProps,
 } from '@/domain/forum/enterprise/entities/question-attachment'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { Injectable } from '@nestjs/common'
 
+// O que esse arquivo faz é criar conexão entre a questão e o attachment
 export function makeQuestionAttachment(
   override: Partial<QuestionAttachmentProps> = {},
   id?: UniqueEntityID, // (opcional) pode passar um id manual
@@ -18,4 +21,27 @@ export function makeQuestionAttachment(
   )
 
   return questionAttachment
+}
+
+@Injectable()
+export class QuestionAttachmentFactory {
+  constructor(private prisma: PrismaService) {}
+
+  async makePrismaQuestionAttachment(
+    data: Partial<QuestionAttachmentProps> = {},
+  ): Promise<QuestionAttachment> {
+    const questionAttachment = makeQuestionAttachment(data)
+
+    await this.prisma.attachment.update({
+      where: {
+        id: questionAttachment.attachmentId.toString(),
+      },
+      data: {
+        // atualiza esse campo para associar com uma questão
+        questionId: questionAttachment.questionId.toString(),
+      },
+    })
+
+    return questionAttachment
+  }
 }

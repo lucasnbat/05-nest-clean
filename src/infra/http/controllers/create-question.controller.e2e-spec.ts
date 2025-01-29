@@ -5,6 +5,7 @@ import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
+import { AttachmentFactory } from 'test/factories/make-attachment'
 import { StudentFactory } from 'test/factories/make-student'
 
 describe('Create question (e2e)', () => {
@@ -12,13 +13,14 @@ describe('Create question (e2e)', () => {
   let prisma: PrismaService
   let jwt: JwtService
   let studentFactory: StudentFactory
+  let attachmentFactory: AttachmentFactory
 
   // isso é a função de inicialização do app http nest
   beforeAll(async () => {
     // cria um módulo de teste ligado ao módulo da aplicação
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [StudentFactory],
+      providers: [StudentFactory, AttachmentFactory],
     }).compile()
 
     // cria a aplicação nest a partir do moduleRef e associa para a var app
@@ -33,6 +35,7 @@ describe('Create question (e2e)', () => {
     // instancia o jwtService, que ele quem cria o token para você (função sign())
     jwt = moduleRef.get(JwtService)
     studentFactory = moduleRef.get(StudentFactory)
+    attachmentFactory = moduleRef.get(AttachmentFactory)
 
     // inicializa o app em uma porta diferente da porta oficial
     // esse app funcionará apenas para os testes
@@ -45,12 +48,16 @@ describe('Create question (e2e)', () => {
     // gera access token com nossa instancia jwt passando o user.id como subject
     const accessToken = jwt.sign({ sub: user.id.toString() })
 
+    const attachment1 = await attachmentFactory.makePrismaAttachment()
+    const attachment2 = await attachmentFactory.makePrismaAttachment()
+
     const response = await request(app.getHttpServer())
       .post('/questions')
       .set('Authorization', `Bearer ${accessToken}`) // inserindo o token para usar a rota travada com autenticação
       .send({
         title: 'New question',
         content: 'Content of question',
+        attachments: [attachment1.id.toString(), attachment2.id.toString()],
       })
 
     expect(response.statusCode).toBe(201)
@@ -62,5 +69,13 @@ describe('Create question (e2e)', () => {
     })
 
     expect(questionOnDatabase).toBeTruthy()
+
+    const attachmentsOnDatabase = await prisma.attachment.findMany({
+      where: {
+        questionId: questionOnDatabase?.id,
+      },
+    })
+
+    expect(attachmentsOnDatabase).toHaveLength(2)
   })
 })
