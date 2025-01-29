@@ -533,4 +533,14 @@
     responder;
   - Underfetching: fazer micro rotas numerosas, sobrecarrega o front-end fazen-
     do ele precisar fazer muitas requisições;
+
+# Value objeto Comentário com Autor
+
+- Entidade = o que existe individualmente, na prática, quase sempre o que tem
+  ID;
+- Value Object (relembrando): identifica individualidade de cada objeto a partir
+  das propriedades que cada um tem. São objetos que não são diferenciáveis pelo
+  seu id, é outra coisa que os diferencia
+  - O que diferencia um slug do outro é a propriedade value de cada um que vai 
+    se diferenciar;
   
