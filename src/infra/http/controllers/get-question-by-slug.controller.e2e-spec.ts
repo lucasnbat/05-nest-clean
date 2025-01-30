@@ -5,6 +5,7 @@ import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
+import { title } from 'process'
 import request from 'supertest'
 import { AttachmentFactory } from 'test/factories/make-attachment'
 import { QuestionFactory } from 'test/factories/make-question'
@@ -61,7 +62,9 @@ describe('Get question by slug)', () => {
   })
 
   test('[GET] /questions/:slug', async () => {
-    const user = await studentFactory.makePrismaStudent()
+    const user = await studentFactory.makePrismaStudent({
+      name: 'John Doe',
+    })
 
     // gera access token com nossa instancia jwt passando o user.id como subject
     const accessToken = jwt.sign({ sub: user.id.toString() })
@@ -88,7 +91,15 @@ describe('Get question by slug)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      question: expect.objectContaining({ title: 'Question 01' }),
+      question: expect.objectContaining({
+        title: 'Question 01',
+        author: 'John Doe',
+        attachments: [
+          expect.objectContaining({
+            title: 'Some attachment',
+          }),
+        ],
+      }),
     })
   })
 })

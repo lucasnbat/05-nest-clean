@@ -1,15 +1,15 @@
 export class Slug {
-  public value: string;
+  public value: string
 
   private constructor(value: string) {
-    this.value = value;
+    this.value = value
   }
 
   // para criar um slug cru, tipo, se eu quiser usar num teste,
   // eu poder passar um "example-slug" sabendo que esse vai ser
   // o slug que vai ser retornado (get-question-by-slug.spec.ts por ex)
   static create(slug: string) {
-    return new Slug(slug);
+    return new Slug(slug)
   }
 
   // métodos estáticos são aqueles que geralmente são funções utilitárias que po-
@@ -28,15 +28,15 @@ export class Slug {
    */
   static createFromText(text: string) {
     const slugText = text
-      .normalize("NFKD") // transforma para formato sem caracter especial
+      .normalize('NFKD') // transforma para formato sem caracter especial
       .toLowerCase() // transforma para minusculas
       .trim() // retira espaços
-      .replace(/\s+/g, "-") // substitui qualquer espaço em branco por - (hífen)
-      .replace(/[^\w-]+/g, "") // pega tudo que não é palavra (^\w) e substitui por string vazia
-      .replace(/_/g, "") // substitui underlines(_) por strings vazias
-      .replace(/--+/g, "") // substitui qualquer - duplicado por um - só
-      .replace(/-$/g, ""); // $ simboliza final da string...se tiver - antes do final, tira
+      .replace(/\s+/g, '-') // substitui qualquer espaço em branco por - (hífen)
+      .replace(/[^\w-]+/g, '') // pega tudo que não é palavra (^\w) e substitui por string vazia
+      .replace(/_/g, '') // substitui underlines(_) por strings vazias
+      .replace(/--+/g, '') // substitui qualquer - duplicado por um - só
+      .replace(/-$/g, '') // $ simboliza final da string...se tiver - antes do final, tira
 
-    return new Slug(slugText); // aparentemente dá para retornar objetos instanciados de uma static
+    return new Slug(slugText) // aparentemente dá para retornar objetos instanciados de uma static
   }
 }
