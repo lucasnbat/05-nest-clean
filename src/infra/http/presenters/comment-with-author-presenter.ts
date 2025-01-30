@@ -1,6 +1,6 @@
 import { CommentWithAuthor } from '@/domain/forum/enterprise/entities/value-objects/comment-with-author'
 
-export class CommentPresenter {
+export class CommentWithAuthorPresenter {
   static toHTTP(commentWithAuthor: CommentWithAuthor) {
     return {
       commentId: commentWithAuthor.commentId.toString(),

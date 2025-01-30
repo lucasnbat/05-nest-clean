@@ -30,6 +30,10 @@ export class CommentWithAuthor extends ValueObject<CommentWithAuthorProps> {
     return this.props.author
   }
 
+  get authorId() {
+    return this.props.authorId
+  }
+
   get createdAt() {
     return this.props.createdAt
   }
