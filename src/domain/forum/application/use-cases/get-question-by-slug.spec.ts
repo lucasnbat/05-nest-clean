@@ -8,6 +8,9 @@ import { InMemoryAnswerAttachmentsRepository } from 'test/repositories/in-memory
 import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memory-question-attachments-repository'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
 import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
+import { makeStudent } from 'test/factories/make-student'
+import { makeAttachment } from 'test/factories/make-attachment'
+import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
 
 let inMemoryQuestionsRepositoryInstance: InMemoryQuestionsRepository
 let inMemoryQuestionAttachmentsRepositoryInstance: InMemoryQuestionAttachmentsRepository
@@ -33,15 +36,30 @@ describe('Get Question By Slug', () => {
   })
 
   it('should be able to get question by slug', async () => {
+    const student = makeStudent({ name: 'John Doe' })
+    inMemoryStudentsRepository.items.push(student)
+
     // chamando factory que vai criar a pergunta
     const newQuestion = makeQuestion({
-      authorId: new UniqueEntityID(),
-      title: faker.lorem.sentence(),
-      content: faker.lorem.text(),
       slug: Slug.create('example-question'),
+      authorId: student.id,
     })
-
     inMemoryQuestionsRepositoryInstance.create(newQuestion)
+
+    // cria e salva attachment
+    const attachment = makeAttachment({
+      title: 'Some attachment',
+    })
+    inMemoryAttachmentsRepositoryInstance.items.push(attachment)
+
+    // associa pergunta com attachment
+    inMemoryQuestionAttachmentsRepositoryInstance.items.push(
+      makeQuestionAttachment({
+        attachmentId: attachment.id,
+        questionId: newQuestion.id,
+      }),
+    )
+
     // usa a função do caso de uso, agora carregado com o repo. fake
     const result = await sut.execute({
       slug: 'example-question',
@@ -54,10 +72,16 @@ describe('Get Question By Slug', () => {
       )
     }
 
-    expect(result.value?.question.id).toBeTruthy()
-
-    // verificar se a question retornada pela pesquisa via slug é a mesma
-    // que foi criada por nós
-    expect(result.value?.question.title).toEqual(newQuestion.title)
+    expect(result.value).toMatchObject({
+      question: expect.objectContaining({
+        title: newQuestion.title,
+        author: 'John Doe',
+        attachments: [
+          expect.objectContaining({
+            title: 'Some attachment',
+          }),
+        ],
+      }),
+    })
   })
 })

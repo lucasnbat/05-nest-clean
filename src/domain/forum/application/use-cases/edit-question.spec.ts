@@ -5,18 +5,28 @@ import { EditQuestionUseCase } from './edit-question'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memory-question-attachments-repository'
 import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 
 let inMemoryQuestionsRepositoryInstance: InMemoryQuestionsRepository
 let inMemoryQuestionAttachmentsRepositoryInstance: InMemoryQuestionAttachmentsRepository
+let inMemoryAttachmentsRepositoryInstance: InMemoryAttachmentsRepository
+let inMemoryStudentsRepositoryInstance: InMemoryStudentsRepository
 let sut: EditQuestionUseCase
 
 describe('Get Question By Slug', () => {
   beforeEach(() => {
+    inMemoryAttachmentsRepositoryInstance = new InMemoryAttachmentsRepository()
+
+    inMemoryStudentsRepositoryInstance = new InMemoryStudentsRepository()
+
     inMemoryQuestionAttachmentsRepositoryInstance =
       new InMemoryQuestionAttachmentsRepository()
     // inicializa o repositório fake que simula a infra/maquinaria
     inMemoryQuestionsRepositoryInstance = new InMemoryQuestionsRepository(
       inMemoryQuestionAttachmentsRepositoryInstance,
+      inMemoryAttachmentsRepositoryInstance,
+      inMemoryStudentsRepositoryInstance,
     )
 
     // inicializa o caso de uso e arma ele com o repositório recém carregado

@@ -5,17 +5,25 @@ import { faker } from '@faker-js/faker'
 import { FetchRecentQuestionsUseCase } from './fetch-recent-questions'
 import { InMemoryAnswerAttachmentsRepository } from 'test/repositories/in-memory-answer-attachment-repository'
 import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memory-question-attachments-repository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 
 let inMemoryQuestionsRepositoryInstance: InMemoryQuestionsRepository
 let inMemoryQuestionAttachmentsRepositoryInstance: InMemoryQuestionAttachmentsRepository
+let inMemoryAttachmentsRepositoryInstance: InMemoryAttachmentsRepository
+let inMemoryStudentsRepositoryInstance: InMemoryStudentsRepository
 let sut: FetchRecentQuestionsUseCase
 
 describe('Fetch Recent Questions', () => {
   beforeEach(() => {
+    inMemoryAttachmentsRepositoryInstance = new InMemoryAttachmentsRepository()
+    inMemoryStudentsRepositoryInstance = new InMemoryStudentsRepository()
     inMemoryQuestionAttachmentsRepositoryInstance =
       new InMemoryQuestionAttachmentsRepository()
     inMemoryQuestionsRepositoryInstance = new InMemoryQuestionsRepository(
       inMemoryQuestionAttachmentsRepositoryInstance,
+      inMemoryAttachmentsRepositoryInstance,
+      inMemoryStudentsRepositoryInstance,
     )
 
     sut = new FetchRecentQuestionsUseCase(inMemoryQuestionsRepositoryInstance)

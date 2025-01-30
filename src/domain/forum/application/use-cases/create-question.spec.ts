@@ -2,13 +2,16 @@ import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questio
 import { CreateQuestionUseCase } from './create-question'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memory-question-attachments-repository'
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 
 // isso é o repositório fake em memória tipado com a estrutura
 // do repositório em `test/repositories/in-memory-questions-repository
 // que por sua vez implementa o contrato/classe em
 // `application/repositories/questions-repository.ts`
 let inMemoryQuestionsRepositoryInstance: InMemoryQuestionsRepository
-
+let inMemoryStudentRepositoryInstance: InMemoryStudentsRepository
+let inMemoryAttachmentsRepositoryInstance: InMemoryAttachmentsRepository
 let inMemoryQuestionAttachmentsRepositoryInstance: InMemoryQuestionAttachmentsRepository
 
 // aqui é o caso de uso com a regra de negóio...ele vai usar o repositório
@@ -18,12 +21,18 @@ let sut: CreateQuestionUseCase
 
 describe('Create question', () => {
   beforeEach(() => {
+    inMemoryStudentRepositoryInstance = new InMemoryStudentsRepository()
+
+    inMemoryAttachmentsRepositoryInstance = new InMemoryAttachmentsRepository()
+
     inMemoryQuestionAttachmentsRepositoryInstance =
       new InMemoryQuestionAttachmentsRepository()
 
     // inicializa o repositório fake que simula a infra/maquinaria
     inMemoryQuestionsRepositoryInstance = new InMemoryQuestionsRepository(
       inMemoryQuestionAttachmentsRepositoryInstance,
+      inMemoryAttachmentsRepositoryInstance,
+      inMemoryStudentRepositoryInstance,
     )
 
     // inicializa o caso de uso e arma ele com o repositório recém carregado
