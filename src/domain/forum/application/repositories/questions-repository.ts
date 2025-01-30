@@ -1,5 +1,6 @@
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { Question } from '../../enterprise/entities/question'
+import { QuestionDetails } from '../../enterprise/entities/value-objects/question-details'
 
 // export interface QuestionsRepository {
 //   findBySlug(slug: string): Promise<Question | null>
@@ -18,6 +19,8 @@ import { Question } from '../../enterprise/entities/question'
 
 export abstract class QuestionsRepository {
   abstract findBySlug(slug: string): Promise<Question | null>
+  // método que adicionei para retornar detalhes da pergunta
+  abstract findDetailsBySlug(slug: string): Promise<QuestionDetails | null>
   abstract create(question: Question): Promise<void>
   abstract findById(id: string): Promise<Question | null>
   abstract findManyRecent(params: PaginationParams): Promise<Question[]>

@@ -6,31 +6,47 @@ import { Attachment } from '../attachment'
 export interface QuestionDetailsProps {
   questionId: UniqueEntityID
   authorId: UniqueEntityID
-  autor: string
+  author: string
   title: string
   slug: Slug
   content: string
   attachments: Attachment[]
   bestAnswerId?: UniqueEntityID | null
   createdAt: Date
-  updatedAt: Date | null
+  updatedAt?: Date | null
 }
 
 export class QuestionDetails extends ValueObject<QuestionDetailsProps> {
-  get commentId() {
-    return this.props.commentId
+  get questionId() {
+    return this.props.questionId
   }
 
-  get content() {
-    return this.props.content
+  get authorId() {
+    return this.props.authorId
   }
 
   get author() {
     return this.props.author
   }
 
-  get authorId() {
-    return this.props.authorId
+  get title() {
+    return this.props.title
+  }
+
+  get slug() {
+    return this.props.slug
+  }
+
+  get content() {
+    return this.props.content
+  }
+
+  get attachments() {
+    return this.props.attachments
+  }
+
+  get bestAnswerId() {
+    return this.props.bestAnswerId
   }
 
   get createdAt() {
@@ -41,7 +57,7 @@ export class QuestionDetails extends ValueObject<QuestionDetailsProps> {
     return this.props.updatedAt
   }
 
-  static create(props: CommentWithAuthorProps) {
-    return new CommentWithAuthor(props)
+  static create(props: QuestionDetailsProps) {
+    return new QuestionDetails(props)
   }
 }
