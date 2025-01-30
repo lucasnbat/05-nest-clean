@@ -1,7 +1,7 @@
 import { Either, right } from '@/core/either'
 import { QuestionCommentsRepository } from '../repositories/question-comments-repository'
 import { Injectable } from '@nestjs/common'
-import { CommentWithAuthor } from '../repositories/enterprise/entities/value-objects/comment-with-author'
+import { CommentWithAuthor } from '../../enterprise/entities/value-objects/comment-with-author'
 
 interface FetchQuestionCommentsUseCaseRequest {
   questionId: string

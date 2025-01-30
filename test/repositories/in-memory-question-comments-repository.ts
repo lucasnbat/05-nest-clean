@@ -3,7 +3,7 @@ import { QuestionCommentsRepository } from '@/domain/forum/application/repositor
 import { StudentsRepository } from '@/domain/forum/application/repositories/students-repository'
 import { QuestionComment } from '@/domain/forum/enterprise/entities/question-comment'
 import { InMemoryStudentsRepository } from './in-memory-students-repository'
-import { CommentWithAuthor } from '@/domain/forum/application/repositories/enterprise/entities/value-objects/comment-with-author'
+import { CommentWithAuthor } from '@/domain/forum/enterprise/entities/value-objects/comment-with-author'
 
 export class InMemoryQuestionCommentsRepository
   implements QuestionCommentsRepository
