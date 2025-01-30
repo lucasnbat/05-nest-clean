@@ -39,10 +39,10 @@ export class FetchQuestionCommentsController {
       throw new BadRequestException()
     }
 
-    const questionComments = result.value.questionComments
+    const comments = result.value.comments
 
     return {
-      comments: questionComments.map((questionComment) =>
+      comments: comments.map((comment) =>
         CommentPresenter.toHTTP(questionComment),
       ),
     }
