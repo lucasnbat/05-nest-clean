@@ -6,7 +6,9 @@ import { INestApplication } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
+import { AttachmentFactory } from 'test/factories/make-attachment'
 import { QuestionFactory } from 'test/factories/make-question'
+import { QuestionAttachmentFactory } from 'test/factories/make-question-attachment'
 import { StudentFactory } from 'test/factories/make-student'
 
 describe('Get question by slug)', () => {
@@ -15,6 +17,8 @@ describe('Get question by slug)', () => {
   let jwt: JwtService
   let studentFactory: StudentFactory
   let questionFactory: QuestionFactory
+  let questionAttachmentFactory: QuestionAttachmentFactory
+  let attachmentFactory: AttachmentFactory
 
   // isso é a função de inicialização do app http nest
   beforeAll(async () => {
@@ -25,7 +29,12 @@ describe('Get question by slug)', () => {
       // adiciona importação do database module para disponibilizar
       // serviço do prisma
       imports: [AppModule, DatabaseModule],
-      providers: [StudentFactory, QuestionFactory],
+      providers: [
+        StudentFactory,
+        QuestionFactory,
+        QuestionAttachmentFactory,
+        AttachmentFactory,
+      ],
     }).compile()
 
     // cria a aplicação nest a partir do moduleRef e associa para a var app
@@ -43,6 +52,8 @@ describe('Get question by slug)', () => {
     // instancia o serviço de factorys criadoras de registros prisma
     studentFactory = moduleRef.get(StudentFactory)
     questionFactory = moduleRef.get(QuestionFactory)
+    questionAttachmentFactory = moduleRef.get(QuestionAttachmentFactory)
+    attachmentFactory = moduleRef.get(AttachmentFactory)
 
     // inicializa o app em uma porta diferente da porta oficial
     // esse app funcionará apenas para os testes
@@ -55,10 +66,19 @@ describe('Get question by slug)', () => {
     // gera access token com nossa instancia jwt passando o user.id como subject
     const accessToken = jwt.sign({ sub: user.id.toString() })
 
-    await questionFactory.makePrismaQuestion({
+    const question = await questionFactory.makePrismaQuestion({
       authorId: user.id,
       title: 'Question 01',
       slug: Slug.create('question-01'),
+    })
+
+    const attachment = await attachmentFactory.makePrismaAttachment({
+      title: 'Some attachment',
+    })
+
+    await questionAttachmentFactory.makePrismaQuestionAttachment({
+      attachmentId: attachment.id,
+      questionId: question.id,
     })
 
     const response = await request(app.getHttpServer())
