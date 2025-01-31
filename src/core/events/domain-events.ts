@@ -136,3 +136,23 @@ export class DomainEvents {
     }
   }
 }
+
+/**
+ * markAggregateForDispatch (manda para markedAggregates) -> markedAggregates (agregados com eventos pendentes) 
+ * -> dispatchEventsForAggregate [busca agregado por ID, e manda para o...] -> dispatchAggregateEvents (pega cada evento
+ * do agregado e usa dispatch() para acionar cada call-back desse evento) -> após o dispatchEventsForAggregate vai limpar
+ * os eventos pendentes dentro do agregado e remover da lista de agregados com eventos pendentes
+
+ * handlersMap: vetor com nomes de evento e funções a cada posição
+ * removeAggregateFromMarkedDispatchList: remove da lista de agregados com eventos pendentes
+ * findMarkedAggregateById: função utilitaria para achar id do agreggate marcado como pendente
+ * register: o register registra um subscriber dentro do handlersMap e pusha uma função de call
+	 back para dentro de uma chave criada com o nome da classe do evento. Assim fica
+	 associado que para evento x temos y função call-back a ser chaamda quando o evento
+	 ocorre.
+ * dispacth: função com o trabalho de acessar as chaves de eventos registradas pelo register no
+ * handlersMap e executar os call-backs armazenados dentro dessa chave 
+
+ * Nota: por chave estou querendo dizer o slot do vetor. Para um vetor [_, _, _] temos três chaves
+   (slots vazios) e cada um pode ter vários eventos dentro
+ */
