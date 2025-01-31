@@ -16,6 +16,8 @@ import { AnswerAttachmentsRepository } from '@/domain/forum/application/reposito
 import { AnswerCommentsRepository } from '@/domain/forum/application/repositories/answer-comments-repository'
 import { AttachmentsRepository } from '@/domain/forum/application/repositories/attachments-repository'
 import { PrismaAttachmentsRepository } from './prisma/repositories/prisma-attachments-repository'
+import { NotificationsRepository } from '@/domain/notification/application/repositories/notifications-repository'
+import { PrismaNotificationsRepository } from './prisma/repositories/prisma-notifications-repository'
 
 @Module({
   providers: [
@@ -45,6 +47,10 @@ import { PrismaAttachmentsRepository } from './prisma/repositories/prisma-attach
     {
       provide: AttachmentsRepository,
       useClass: PrismaAttachmentsRepository,
+    },
+    {
+      provide: NotificationsRepository,
+      useClass: PrismaNotificationsRepository,
     },
   ],
   // necessário para o http.module.ts acessar e passar para controllers
