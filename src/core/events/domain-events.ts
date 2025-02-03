@@ -121,6 +121,10 @@ export class DomainEvents {
     // com alguma função callback, se sim, retorna true
     const isEventRegistered = eventClassName in this.handlersMap
 
+    if (!this.shouldRun) {
+      return
+    }
+
     // se eu tiver isso:
     // handlersMap = {
     //   "UserHasCreated": [callback1, callback2],
