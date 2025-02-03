@@ -47,7 +47,9 @@ beforeAll(async () => {
   DomainEvents.shouldRun = false
 
   // roda apenas as migrações sem verificar alterações de schema
-  execSync('npx prisma migrate deploy')
+  const result = execSync('npx prisma migrate deploy')
+
+  console.log(result.toString())
 })
 
 afterAll(async () => {
