@@ -544,3 +544,19 @@
   - O que diferencia um slug do outro é a propriedade value de cada um que vai 
     se diferenciar;
   
+# Cache
+
+- Otimização de busca de dados na aplicação;
+- Ao salvar dados em cache, você está salvando informações estaticamente;
+  - Tem que cuidar para não gravar informações que mudam muito frequentemente;
+  - As vezes você vai correr risoc de mostrar uma info. desatualizada;
+- Prefira cache para informações que são difíceis de mudar;
+- 1ª vez que buscar: bate no BD e traz informações a partir de um processamento;
+  - Esse resultado é salvo em algum serviço terceirizado;
+    - Serviço perfomático para leitura e escrita de dados (geralmente bancos
+      NoSQL);
+    - Redis, DragonFly...
+- O cache é totalmente da camada de infra;
+- Estruturas de cache geralmente seguem modelo key/value
+- As vezes nem é tão bom você proporcionar edição de dados
+  - Compensa mais as vezes deletar a info. e trazer (get) uma info. mais atual;
