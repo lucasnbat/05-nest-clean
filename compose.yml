@@ -13,3 +13,12 @@ services:
       PGDATA: /data/postgres # pasta de dados do postgres
     volumes:
       - ./data/pg:/data/postgres # linkando pasta de dados postgres com pasta interna no vscode
+    
+  cache: 
+    container_name: nest-clean-cache
+    image: redis # ótima para desenvolv., mas a da bitnami é melhor para prod 
+    ports: 
+      - 6379:6379
+    volumes: 
+      - ./data/redis:/data # nossa pasta local é ./data/redis, lá no bd é /data
+

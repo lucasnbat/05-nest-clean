@@ -1,9 +1,10 @@
 // instale essa lib ioredis
 // ela serve para lidar com o Redis e com op. async await (assincronas)
 import { Redis } from 'ioredis'
-import { OnModuleDestroy } from '@nestjs/common'
+import { Injectable, OnModuleDestroy } from '@nestjs/common'
 import { EnvService } from '@/infra/env/env.service'
 
+@Injectable()
 export class RedisService extends Redis implements OnModuleDestroy {
   constructor(envService: EnvService) {
     super({
