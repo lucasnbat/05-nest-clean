@@ -8,6 +8,7 @@ import { QuestionAttachmentsRepository } from '@/domain/forum/application/reposi
 import { QuestionDetails } from '@/domain/forum/enterprise/entities/value-objects/question-details'
 import { PrismaQuestionDetailsMapper } from '../mappers/prisma-question-details-mapper'
 import { DomainEvents } from '@/core/events/domain-events'
+import { CacheRepository } from '@/infra/cache/cache-repository'
 
 // pois vai ser enviado como dependency para algum construtor de outra classe
 @Injectable()
@@ -15,6 +16,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   constructor(
     private prisma: PrismaService,
     private questionAttachmentsRepository: QuestionAttachmentsRepository,
+    private cache: CacheRepository,
   ) {}
 
   async findBySlug(slug: string): Promise<Question | null> {
@@ -32,6 +34,17 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   }
 
   async findDetailsBySlug(slug: string): Promise<QuestionDetails | null> {
+    // verifica primeiro se já não tem a info no cache
+    const cacheHit = await this.cache.get(`question:${slug}:details`)
+
+    // se cache for diferente de nulo...
+    if (cacheHit) {
+      const cacheData = JSON.parse(cacheHit)
+
+      // retorna os dados e para a exec. da função
+      return cacheData
+    }
+
     const question = await this.prisma.question.findUnique({
       where: {
         slug,
@@ -46,7 +59,16 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       return null
     }
 
-    return PrismaQuestionDetailsMapper.toDomain(question)
+    const questionDetails = PrismaQuestionDetailsMapper.toDomain(question)
+
+    // ex de chave: question:1:details
+    // o valor pode ser uma estrutura em JSON como pode ver:
+    await this.cache.set(
+      `questions:${slug}:details`,
+      JSON.stringify(questionDetails),
+    )
+
+    return questionDetails
   }
 
   async create(question: Question): Promise<void> {
@@ -117,6 +139,8 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       this.questionAttachmentsRepository.deleteMany(
         question.attachments.getRemovedItems(),
       ),
+      // ao editar, invalido o cache (deleta todos os caches da pergunta)
+      this.cache.delete(`question:${data.slug}:details`),
     ])
 
     DomainEvents.dispatchEventsForAggregate(question.id)
