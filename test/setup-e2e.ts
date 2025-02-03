@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto'
 // ao criar a instancia de app de teste
 import { config } from 'dotenv'
 import { execSync } from 'node:child_process'
+import { envSchema } from '@/infra/env/env'
 
 // carrega as vars do .env:
 config({ path: '.env', override: true })
@@ -12,16 +13,18 @@ config({ path: '.env', override: true })
 // da var desse arquivo:
 config({ path: '.env.test', override: true })
 
+const env = envSchema.parse(process.env)
+
 const prisma = new PrismaClient()
 
 function generateUniqueDatabaseURL(schemaId: string) {
   // evita que haja DATABASE_URL vazia ou inexistente
-  if (!process.env.DATABASE_URL) {
+  if (!env.DATABASE_URL) {
     throw new Error('Please provide a DATABASE_URL environment variable')
   }
 
   // cria nova URL
-  const url = new URL(process.env.DATABASE_URL)
+  const url = new URL(env.DATABASE_URL)
 
   // insere o id para criar um novo schema dentro do banco postgres
   url.searchParams.set('schema', schemaId)
