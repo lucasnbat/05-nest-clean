@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto'
 import { config } from 'dotenv'
 import { execSync } from 'node:child_process'
 import { envSchema } from '@/infra/env/env'
+import { DomainEvents } from '@/core/events/domain-events'
 
 // carrega as vars do .env:
 config({ path: '.env', override: true })
@@ -42,6 +43,8 @@ beforeAll(async () => {
 
   // sobrescreve var ambiente DATABASE_URL com a nova databaseURL gerada
   process.env.DATABASE_URL = databaseURL
+
+  DomainEvents.shouldRun = false
 
   // roda apenas as migrações sem verificar alterações de schema
   execSync('npx prisma migrate deploy')
