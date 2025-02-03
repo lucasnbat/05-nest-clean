@@ -67,6 +67,7 @@ import { PrismaNotificationsRepository } from './prisma/repositories/prisma-noti
     AnswerAttachmentsRepository,
     AnswerCommentsRepository,
     AttachmentsRepository,
+    NotificationsRepository,
   ],
 })
 export class DatabaseModule {}
