@@ -22,6 +22,8 @@ export class DomainEvents {
   // deveria se chamar markedAggregatesForDespatch
   private static markedAggregates: AgregateRoot<unknown>[] = []
 
+  public static shouldRun = true
+
   // serve para marcar o agregado dentro do array acima (markedAgreggates)
   public static markAggregateForDispatch(aggregate: AgregateRoot<unknown>) {
     // se não achou o agregado com id passado na lista, agreggateFound = false
