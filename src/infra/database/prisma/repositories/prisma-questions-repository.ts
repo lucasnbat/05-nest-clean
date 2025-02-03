@@ -64,7 +64,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     // ex de chave: question:1:details
     // o valor pode ser uma estrutura em JSON como pode ver:
     await this.cache.set(
-      `questions:${slug}:details`,
+      `question:${slug}:details`,
       JSON.stringify(questionDetails),
     )
 

@@ -7,6 +7,7 @@ import { config } from 'dotenv'
 import { execSync } from 'node:child_process'
 import { envSchema } from '@/infra/env/env'
 import { DomainEvents } from '@/core/events/domain-events'
+import Redis from 'ioredis'
 
 // carrega as vars do .env:
 config({ path: '.env', override: true })
@@ -17,6 +18,11 @@ config({ path: '.env.test', override: true })
 const env = envSchema.parse(process.env)
 
 const prisma = new PrismaClient()
+const redis = new Redis({
+  host: env.REDIS_HOST,
+  port: env.REDIS_PORT,
+  db: env.REDIS_DB,
+})
 
 function generateUniqueDatabaseURL(schemaId: string) {
   // evita que haja DATABASE_URL vazia ou inexistente
@@ -45,6 +51,9 @@ beforeAll(async () => {
   process.env.DATABASE_URL = databaseURL
 
   DomainEvents.shouldRun = false
+
+  // deleta todos os dados do banco redis de cache
+  await redis.flushdb()
 
   // roda apenas as migrações sem verificar alterações de schema
   const result = execSync('npx prisma migrate deploy')
