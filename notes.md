@@ -167,6 +167,8 @@
       tokens recebidos;
       - Pode vazar, pois o poder dela é apenas para decofidicação, não para
         gerar novos tokens.
+  - OBS: mais tarde verifiquei que na verdade a pública CRIPTOGRAFA e verifica 
+    assinaturas, mas APENAS A PRIVADA DECODIFICA mensagens.
 
 ## Algumas anotações
 
